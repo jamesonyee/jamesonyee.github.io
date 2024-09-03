@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebGL Wave Simulation</title>
+    <style>
+      body,
+      html {
+        margin: 0;
+        overflow: hidden;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000;
+      }
+      canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="glCanvas"></canvas>
+    <!-- Sliders for Uniforms -->
+    <div style="position: absolute; top: 10px; left: 10px; color: white">
+      <label for="timeScale">Time Scale:</label>
+      <input type="range" id="timeScale" min="25" max="100" value="50" />
+      <span id="timeScaleValue">50</span><br />
+
+      <label for="lightX">Light X:</label>
+      <input type="range" id="lightX" min="-20" max="50" value="0" />
+      <span id="lightXValue">0</span><br />
+
+      <label for="lightY">Light Y:</label>
+      <input type="range" id="lightY" min="0" max="50" value="0" />
+      <span id="lightYValue">0</span><br />
+
+      <label for="lightZ">Light Z:</label>
+      <input type="range" id="lightZ" min="-20" max="20" value="0" />
+      <span id="lightZValue">0</span><br />
+
+      <label for="ka">Ambient Reflection (Ka):</label>
+      <input type="range" id="ka" min="0" max="1" step="0.01" value="0.1" />
+      <span id="kaValue">0.1</span><br />
+
+      <label for="kd">Diffuse Reflection (Kd):</label>
+      <input type="range" id="kd" min="0" max="1" step="0.01" value="0.5" />
+      <span id="kdValue">0.5</span><br />
+
+      <label for="ks">Specular Reflection (Ks):</label>
+      <input type="range" id="ks" min="0" max="1" step="0.01" value="0.3" />
+      <span id="ksValue">0.3</span><br />
+
+      <label for="noiseAmp">Noise Amplitude:</label>
+      <input type="range" id="noiseAmp" min="0" max="5" step="0.01" value="0" />
+      <span id="noiseAmpValue">0</span><br />
+
+      <label for="noiseFreq">Noise Frequency:</label>
+      <input
+        type="range"
+        id="noiseFreq"
+        min="0.1"
+        max="20"
+        step="0.1"
+        value="1"
+      />
+      <span id="noiseFreqValue">1</span><br />
+
+      <label for="amp0">Amplitude 0:</label>
+      <input type="range" id="amp0" min="0" max="0.8" step="0.01" value="0.4" />
+      <span id="amp0Value">0.4</span><br />
+
+      <label for="propAng0">Propagation Angle 0:</label>
+      <input
+        type="range"
+        id="propAng0"
+        min="-1"
+        max="1"
+        step="0.01"
+        value="0"
+      />
+      <span id="propAng0Value">0</span><br />
+
+      <label for="density0">Density 0:</label>
+      <input type="range" id="density0" min="1" max="3" step="0.1" value="1" />
+      <span id="density0Value">1</span><br />
+
+      <label for="amp1">Amplitude 1:</label>
+      <input type="range" id="amp1" min="0" max="0.8" step="0.01" value="0" />
+      <span id="amp1Value">0</span><br />
+
+      <label for="propAng1">Propagation Angle 1:</label>
+      <input
+        type="range"
+        id="propAng1"
+        min="-1"
+        max="1"
+        step="0.01"
+        value="0"
+      />
+      <span id="propAng1Value">0</span><br />
+
+      <label for="density1">Density 1:</label>
+      <input type="range" id="density1" min="0" max="3" step="0.1" value="1" />
+      <span id="density1Value">1</span><br />
+
+      <label for="phaseShift1">Phase Shift 1:</label>
+      <input
+        type="range"
+        id="phaseShift1"
+        min="-5"
+        max="5"
+        step="0.1"
+        value="0"
+      />
+      <span id="phaseShift1Value">0</span><br />
+
+      <label for="shininess">Shininess:</label>
+      <input type="range" id="shininess" min="1" max="200" step="1" value="2" />
+      <span id="shininessValue">2</span><br />
+    </div>
+    <script src="js/wave.js"></script>
+  </body>
+</html>
