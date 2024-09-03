@@ -9,6 +9,10 @@ app.get("/portfolio", function (req, res, next) {
   res.status(200).sendFile(__dirname + "/portfolio.html");
 });
 
+app.get("/cat", function (req, res, next) {
+  res.status(200).send("cat");
+});
+
 app.get("*", function (req, res, next) {
   res.status(404).sendFile(__dirname + "/404.html");
 });
