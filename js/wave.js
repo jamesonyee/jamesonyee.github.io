@@ -41,8 +41,8 @@ async function initWebGL() {
     return;
   }
 
-  const vertexShaderUrl = "shaders/vertex.glsl";
-  const fragmentShaderUrl = "shaders/frag.glsl";
+  const vertexShaderUrl = "shaders/waveVertex.glsl";
+  const fragmentShaderUrl = "shaders/waveFrag.glsl";
 
   const vertexShader = await loadShader(gl, gl.VERTEX_SHADER, vertexShaderUrl);
   const fragmentShader = await loadShader(
@@ -57,16 +57,6 @@ async function initWebGL() {
 
   if (!fragmentShader) {
     console.error(`Failed to load fragment shader from ${fragmentShaderUrl}`);
-  }
-
-  if (!vertexShader) {
-    console.error("Vertex shader failed to load.");
-    return;
-  }
-
-  if (!fragmentShader) {
-    console.error("Fragment shader failed to load.");
-    return;
   }
 
   const shaderProgram = gl.createProgram();
