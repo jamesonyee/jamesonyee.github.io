@@ -3,13 +3,13 @@ function showError(errorText) {
   const errorTextElement = document.createElement("p");
   errorTextElement.innerText = errorText;
   errorBox.appendChild(errorTextElement);
-  console.log(errorText);
+  console.error(errorText);
 }
 
 async function loadShader(gl, type, url) {
   const response = await fetch(url);
   if (!response.ok) {
-    console.error(`Failed to fetch shader source from ${url}`);
+    showError(`Failed to fetch shader source from ${url}`);
     return null;
   }
 
@@ -17,7 +17,7 @@ async function loadShader(gl, type, url) {
   const shader = gl.createShader(type);
 
   if (!shader) {
-    console.error(`Failed to create shader of type ${type}`);
+    showError(`Failed to create shader of type ${type}`);
     return null;
   }
 
@@ -26,7 +26,7 @@ async function loadShader(gl, type, url) {
 
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
     const shaderType = type === gl.VERTEX_SHADER ? "vertex" : "fragment";
-    console.error(
+    showError(
       `Error compiling ${shaderType} shader from ${url}: ${gl.getShaderInfoLog(
         shader
       )}`
@@ -38,23 +38,83 @@ async function loadShader(gl, type, url) {
   return shader;
 }
 
-async function QuadXZ() {
+function createGrid(size, divisions) {
+  const halfSize = size / 2;
+  const step = size / divisions;
+  const vertices = [];
+  const indices = [];
+
+  for (let i = 0; i < divisions; i++) {
+    for (let j = 0; j < divisions; j++) {
+      const x0 = -halfSize + i * step;
+      const z0 = -halfSize + j * step;
+      const x1 = -halfSize + (i + 1) * step;
+      const z1 = -halfSize + (j + 1) * step;
+
+      // Quad 1
+      vertices.push(x0, 0, z0);
+      vertices.push(x1, 0, z0);
+      vertices.push(x0, 0, z1);
+
+      // Quad 2
+      vertices.push(x1, 0, z0);
+      vertices.push(x1, 0, z1);
+      vertices.push(x0, 0, z1);
+    }
+  }
+
+  return new Float32Array(vertices);
+}
+
+function createGridWithNormals(size, divisions) {
+  const halfSize = size / 2;
+  const step = size / divisions;
+  const vertices = [];
+
+  for (let i = 0; i < divisions; i++) {
+    for (let j = 0; j < divisions; j++) {
+      const x0 = -halfSize + i * step;
+      const z0 = -halfSize + j * step;
+      const x1 = -halfSize + (i + 1) * step;
+      const z1 = -halfSize + (j + 1) * step;
+
+      // Quad 1
+      vertices.push(x0, 0, z0, 0, 1, 0);
+      vertices.push(x1, 0, z0, 0, 1, 0);
+      vertices.push(x0, 0, z1, 0, 1, 0);
+
+      // Quad 2
+      vertices.push(x1, 0, z0, 0, 1, 0);
+      vertices.push(x1, 0, z1, 0, 1, 0);
+      vertices.push(x0, 0, z1, 0, 1, 0);
+    }
+  }
+
+  return new Float32Array(vertices);
+}
+
+async function initWebGL() {
   const canvas = document.getElementById("glCanvas");
   if (!canvas) {
     showError(
-      "Cannot get canvas reference - chekc for typos or laoding sript too early in HTML"
+      "Cannot get canvas reference - check for typos or loading script too early in HTML"
     );
     return;
   }
+
   const gl = canvas.getContext("webgl2");
   if (!gl) {
     showError("This browser does not support WebGL 2");
     return;
   }
 
-  //init shaders
-  const vertexShaderUrl = "shaders/vert.glsl";
-  const fragmentShaderUrl = "shaders/frag.glsl";
+  // Set canvas size
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
+
+  // Load shaders
+  const vertexShaderUrl = "shaders/waveVertex.glsl";
+  const fragmentShaderUrl = "shaders/waveFrag.glsl";
 
   const vertexShader = await loadShader(gl, gl.VERTEX_SHADER, vertexShaderUrl);
   const fragmentShader = await loadShader(
@@ -63,12 +123,9 @@ async function QuadXZ() {
     fragmentShaderUrl
   );
 
-  if (!vertexShader) {
-    console.error(`Failed to load vertex shader from ${vertexShaderUrl}`);
-  }
-
-  if (!fragmentShader) {
-    console.error(`Failed to load fragment shader from ${fragmentShaderUrl}`);
+  if (!vertexShader || !fragmentShader) {
+    showError("Failed to load shaders");
+    return;
   }
 
   const shaderProgram = gl.createProgram();
@@ -77,55 +134,87 @@ async function QuadXZ() {
   gl.linkProgram(shaderProgram);
 
   if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-    console.error(
-      `Error linking program: ${gl.getProgramInfoLog(shaderProgram)}`
-    );
+    showError(`Error linking program: ${gl.getProgramInfoLog(shaderProgram)}`);
     return;
   }
 
-  const vertexPositionAttribLocation = gl.getAttribLocation(
+  //Set up buffers
+  const gridSize = 400;
+  const gridDivisions = 400;
+  const gridVertices = createGrid(gridSize, gridDivisions);
+
+  const gridBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, gridBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, gridVertices, gl.STATIC_DRAW);
+
+  // Get attribute location
+  const positionAttribLocation = gl.getAttribLocation(
     shaderProgram,
-    "vertexPosition"
+    "aVertexPosition"
+  );
+  const normalAttribLocation = gl.getAttribLocation(
+    shaderProgram,
+    "aVertexNormal"
   );
 
-  if (vertexPositionAttribLocation < 0) {
-    showError("Failed to get attrib location for vertexPosition");
-    return;
-  }
+  // Bind buffer and assign attributes
+  gl.bindBuffer(gl.ARRAY_BUFFER, gridBuffer);
+  gl.vertexAttribPointer(
+    positionAttribLocation,
+    3,
+    gl.FLOAT,
+    false,
+    6 * Float32Array.BYTES_PER_ELEMENT,
+    0
+  );
+  gl.vertexAttribPointer(
+    normalAttribLocation,
+    3,
+    gl.FLOAT,
+    false,
+    6 * Float32Array.BYTES_PER_ELEMENT,
+    3 * Float32Array.BYTES_PER_ELEMENT
+  );
+  gl.enableVertexAttribArray(positionAttribLocation);
+  gl.enableVertexAttribArray(normalAttribLocation);
 
-  //Output merger
-  canvas.width = canvas.clientWidth;
-  canvas.height = canvas.clientHeight;
+  //Set up viewport and clear color
+  gl.viewport(0, 0, canvas.width, canvas.height);
   gl.clearColor(0.08, 0.08, 0.08, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  //rasterizer
-  gl.viewport(0, 0, canvas.width, canvas.height);
-
-  //Set GPU program
-  gl.enableVertexAtribArray(vertexPositionAttribLocation);
   gl.useProgram(shaderProgram);
 
-  //Input assembler
+  const projectionMatrix = glMatrix.mat4.create();
+  glMatrix.mat4.perspective(
+    projectionMatrix,
+    (45 * Math.PI) / 180, // Field of view in radians
+    canvas.width / canvas.height, // Aspect ratio
+    0.1, // Near clipping plane
+    1000.0 // Far clipping plane
+  );
 
-  //init buffers
-  const QuadVerts = [
-    // Top middle
-    0.0, 0.5,
-    // Bottom left
-    -0.5, -0.5,
-    // Bottom right
-    0.05, -0.5,
-  ];
-  const QuadVertsCpuBuffer = new Float32Array(QuadVerts);
+  const viewMatrix = glMatrix.mat4.create();
+  glMatrix.mat4.lookAt(viewMatrix, [0, 100, 500], [0, 0, 0], [0, 1, 0]);
 
-  const QuadGeoBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, QuadGeoBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, QuadVertsCpuBuffer, gl.STATIC_DRAW);
+  const projectionMatrixLocation = gl.getUniformLocation(
+    shaderProgram,
+    "uProjectionMatrix"
+  );
+  const viewMatrixLocation = gl.getUniformLocation(
+    shaderProgram,
+    "uViewMatrix"
+  );
+
+  gl.uniformMatrix4fv(projectionMatrixLocation, false, projectionMatrix);
+  gl.uniformMatrix4fv(viewMatrixLocation, false, viewMatrix);
+
+  // Draw the grid
+  gl.drawArrays(gl.LINES, 0, gridVertices.length / 3);
 }
 
 try {
-  QuadXZ();
+  initWebGL();
 } catch (e) {
   showError(`Uncaught JS exception: ${e}`);
 }
