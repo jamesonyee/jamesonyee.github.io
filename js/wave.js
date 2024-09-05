@@ -73,112 +73,52 @@ async function initWebGL() {
 
   gl.useProgram(shaderProgram);
 
-  // Get uniform locations
-  const uniforms = {
-    timeScale: gl.getUniformLocation(shaderProgram, "u_timeScale"),
-    lightPosition: gl.getUniformLocation(shaderProgram, "u_lightPosition"),
-    ka: gl.getUniformLocation(shaderProgram, "u_ka"),
-    kd: gl.getUniformLocation(shaderProgram, "u_kd"),
-    ks: gl.getUniformLocation(shaderProgram, "u_ks"),
-    noiseAmplitude: gl.getUniformLocation(shaderProgram, "u_noiseAmplitude"),
-    noiseFrequency: gl.getUniformLocation(shaderProgram, "u_noiseFrequency"),
-    amp0: gl.getUniformLocation(shaderProgram, "u_amp0"),
-    propAng0: gl.getUniformLocation(shaderProgram, "u_propAng0"),
-    density0: gl.getUniformLocation(shaderProgram, "u_density0"),
-    amp1: gl.getUniformLocation(shaderProgram, "u_amp1"),
-    propAng1: gl.getUniformLocation(shaderProgram, "u_propAng1"),
-    density1: gl.getUniformLocation(shaderProgram, "u_density1"),
-    phaseShift1: gl.getUniformLocation(shaderProgram, "u_phaseShift1"),
-    shininess: gl.getUniformLocation(shaderProgram, "u_shininess"),
-  };
+  // Get slider elements
+  const amp0Slider = document.getElementById("amp0");
+  const propAng0Slider = document.getElementById("propAng0");
+  const density0Slider = document.getElementById("density0");
 
-  // Set up sliders and update uniforms
-  function setupSlider(id, updateFunction) {
-    const slider = document.getElementById(id);
-    const valueDisplay = document.getElementById(id + "Value");
+  // Get value display elements
+  const amp0Value = document.getElementById("amp0Value");
+  const propAng0Value = document.getElementById("propAng0Value");
+  const density0Value = document.getElementById("density0Value");
 
-    slider.addEventListener("input", () => {
-      valueDisplay.textContent = slider.value;
-      updateFunction(parseFloat(slider.value));
-    });
-
-    // Initialize the value
-    valueDisplay.textContent = slider.value;
-    updateFunction(parseFloat(slider.value));
+  // Update value display elements
+  function updateValueDisplay() {
+    amp0Value.textContent = amp0Slider.value;
+    propAng0Value.textContent = propAng0Slider.value;
+    density0Value.textContent = density0Slider.value;
   }
 
-  setupSlider("timeScale", (value) => {
-    gl.uniform1f(uniforms.timeScale, value);
+  // Initialize value display
+  updateValueDisplay();
+
+  // WebGL uniform locations
+  const amp0Location = gl.getUniformLocation(program, "uAmp0");
+  const propAng0Location = gl.getUniformLocation(program, "uPropAng0");
+  const density0Location = gl.getUniformLocation(program, "uDensity0");
+
+  // Update uniforms
+  function updateUniforms() {
+    gl.uniform1f(amp0Location, parseFloat(amp0Slider.value));
+    gl.uniform1f(propAng0Location, parseFloat(propAng0Slider.value));
+    gl.uniform1f(density0Location, parseFloat(density0Slider.value));
+  }
+
+  // Add event listeners to sliders
+  amp0Slider.addEventListener("input", () => {
+    updateValueDisplay();
+    updateUniforms();
   });
 
-  setupSlider("lightX", (value) => {
-    const y = parseFloat(document.getElementById("lightY").value);
-    const z = parseFloat(document.getElementById("lightZ").value);
-    gl.uniform3f(uniforms.lightPosition, value, y, z);
+  propAng0Slider.addEventListener("input", () => {
+    updateValueDisplay();
+    updateUniforms();
   });
 
-  setupSlider("lightY", (value) => {
-    const x = parseFloat(document.getElementById("lightX").value);
-    const z = parseFloat(document.getElementById("lightZ").value);
-    gl.uniform3f(uniforms.lightPosition, x, value, z);
-  });
-
-  setupSlider("lightZ", (value) => {
-    const x = parseFloat(document.getElementById("lightX").value);
-    const y = parseFloat(document.getElementById("lightY").value);
-    gl.uniform3f(uniforms.lightPosition, x, y, value);
-  });
-
-  setupSlider("ka", (value) => {
-    gl.uniform1f(uniforms.ka, value);
-  });
-
-  setupSlider("kd", (value) => {
-    gl.uniform1f(uniforms.kd, value);
-  });
-
-  setupSlider("ks", (value) => {
-    gl.uniform1f(uniforms.ks, value);
-  });
-
-  setupSlider("noiseAmp", (value) => {
-    gl.uniform1f(uniforms.noiseAmplitude, value);
-  });
-
-  setupSlider("noiseFreq", (value) => {
-    gl.uniform1f(uniforms.noiseFrequency, value);
-  });
-
-  setupSlider("amp0", (value) => {
-    gl.uniform1f(uniforms.amp0, value);
-  });
-
-  setupSlider("propAng0", (value) => {
-    gl.uniform1f(uniforms.propAng0, value);
-  });
-
-  setupSlider("density0", (value) => {
-    gl.uniform1f(uniforms.density0, value);
-  });
-
-  setupSlider("amp1", (value) => {
-    gl.uniform1f(uniforms.amp1, value);
-  });
-
-  setupSlider("propAng1", (value) => {
-    gl.uniform1f(uniforms.propAng1, value);
-  });
-
-  setupSlider("density1", (value) => {
-    gl.uniform1f(uniforms.density1, value);
-  });
-
-  setupSlider("phaseShift1", (value) => {
-    gl.uniform1f(uniforms.phaseShift1, value);
-  });
-
-  setupSlider("shininess", (value) => {
-    gl.uniform1f(uniforms.shininess, value);
+  density0Slider.addEventListener("input", () => {
+    updateValueDisplay();
+    updateUniforms();
   });
 
   // Initialize the canvas

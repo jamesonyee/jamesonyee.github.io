@@ -139,8 +139,8 @@ async function initWebGL() {
   }
 
   //Set up buffers
-  const gridSize = 400;
-  const gridDivisions = 400;
+  const gridSize = 200;
+  const gridDivisions = 200;
   const gridVertices = createGrid(gridSize, gridDivisions);
 
   const gridBuffer = gl.createBuffer();
@@ -195,7 +195,7 @@ async function initWebGL() {
   );
 
   const viewMatrix = glMatrix.mat4.create();
-  glMatrix.mat4.lookAt(viewMatrix, [0, 100, 500], [0, 0, 0], [0, 1, 0]);
+  glMatrix.mat4.lookAt(viewMatrix, [0, 50, 225], [0, -20, 0], [0, 1, 0]);
 
   const projectionMatrixLocation = gl.getUniformLocation(
     shaderProgram,
@@ -209,8 +209,85 @@ async function initWebGL() {
   gl.uniformMatrix4fv(projectionMatrixLocation, false, projectionMatrix);
   gl.uniformMatrix4fv(viewMatrixLocation, false, viewMatrix);
 
-  // Draw the grid
-  gl.drawArrays(gl.LINES, 0, gridVertices.length / 3);
+  // Get uniform locations
+  const timeScaleLocation = gl.getUniformLocation(shaderProgram, "uTimeScale");
+  const amp0Location = gl.getUniformLocation(shaderProgram, "uAmp0");
+  const propAng0Location = gl.getUniformLocation(shaderProgram, "uPropAng0");
+  const density0Location = gl.getUniformLocation(shaderProgram, "uDensity0");
+
+  // Get slider elements
+  const timeScaleSlider = document.getElementById("timeScale");
+  const amp0Slider = document.getElementById("amp0");
+  const propAng0Slider = document.getElementById("propAng0");
+  const density0Slider = document.getElementById("density0");
+
+  // Get value display elements
+  const timeScaleValue = document.getElementById("timeScaleValue");
+  const amp0Value = document.getElementById("amp0Value");
+  const propAng0Value = document.getElementById("propAng0Value");
+  const density0Value = document.getElementById("density0Value");
+
+  function updateValueDisplay() {
+    timeScaleValue.textContent = timeScaleSlider.value;
+    amp0Value.textContent = amp0Slider.value;
+    propAng0Value.textContent = propAng0Slider.value;
+    density0Value.textContent = density0Slider.value;
+  }
+
+  function updateUniforms() {
+    gl.uniform1f(timeScaleLocation, parseFloat(timeScaleSlider.value));
+    gl.uniform1f(amp0Location, parseFloat(amp0Slider.value));
+    gl.uniform1f(propAng0Location, parseFloat(propAng0Slider.value));
+    gl.uniform1f(density0Location, parseFloat(density0Slider.value));
+  }
+
+  // Add event listeners to sliders
+
+  timeScaleSlider.addEventListener("input", () => {
+    updateValueDisplay();
+    updateUniforms();
+  });
+
+  amp0Slider.addEventListener("input", () => {
+    updateValueDisplay();
+    updateUniforms();
+  });
+
+  propAng0Slider.addEventListener("input", () => {
+    updateValueDisplay();
+    updateUniforms();
+  });
+
+  density0Slider.addEventListener("input", () => {
+    updateValueDisplay();
+    updateUniforms();
+  });
+
+  // Set initial values
+  updateValueDisplay();
+  updateUniforms();
+
+  // Animation loop
+  let startTime = Date.now();
+
+  function render() {
+    // Calculate elapsed time
+    const currentTime = Date.now();
+    const elapsedTime = (currentTime - startTime) / 1000; // in seconds
+
+    // Update Timer uniform
+    gl.uniform1f(timeScaleLocation, elapsedTime);
+
+    // Clear canvas and draw the grid
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.drawArrays(gl.LINES, 0, gridVertices.length / 3);
+
+    // Request the next frame
+    requestAnimationFrame(render);
+  }
+
+  // Start the animation loop
+  render();
 }
 
 try {
