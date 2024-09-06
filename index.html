@@ -11,12 +11,28 @@
       href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Slab:wght@100..900&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <link rel="stylesheet" href="style.css" />
     <title>Jameson Yee - About Me</title>
   </head>
   <body>
     <!-- Header Section -->
     <header>
+      <nav>
+        <i class="fa fa-bars" aria-hidden="true"></i>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
       <section id="introduction">
         <h2>Hi, I'm Jameson Yee</h2>
         <p>
@@ -27,51 +43,67 @@
           solutions that engage users and elevate digital content.
         </p>
       </section>
-    </header>
 
-    <!-- Intrests Section -->
-    <section id="skills">
-      <h2>Interests</h2>
-      <ul>
-        <li>XR development</li>
-        <li>Physics-Based Simulation</li>
-        <li>3D Modeling and Animation</li>
-      </ul>
-    </section>
+      <hr />
+  
+      <!-- Intrests Section -->
+      <section id="skills">
+        <h2>Interests</h2>
+        <ul>
+          <li>XR development</li>
+          <li>Physics-Based Simulation</li>
+          <li>3D Modeling and Animation</li>
+        </ul>
+      </section>
 
-    <!-- education Section -->
-    <section id="edu">
-      <h2>Education</h2>
-      <img src="src/1631354574889.jfif" />
-      <p>Oregon State University</p>
-      <p>Bachelor of Computer Science (2020 - 2024)</p>
-      <p>GPA: 3.07</p>
-    </section>
+      <hr />
+  
+      <!-- education Section -->
+      <section id="edu">
+        <h2>Education</h2>
+        <div class="edu-container">
+          <div class="osu-logo">
+            <img src="src/1631354574889.jfif" alt="OSU Logo" />
+          </div>
+          <div class="edu-details">
+            <p>Oregon State University</p>
+            <p>Bachelor of Computer Science (2020 - 2024)</p>
+            <p>GPA: 3.07</p>
+          </div>
+        </div>
+      </section>
 
-    <!-- Experience Section -->
-    <section id="exp">
-      <h2>Experience</h2>
-      <p>Undergrad Research Assistant</p>
-      <p>SIGGRPAH Student Volunteer</p>
-    </section>
+      <hr />
+  
+      <!-- Experience Section -->
+      <section id="exp">
+        <h2>Experience</h2>
+        <p>Undergrad Research Assistant</p>
+        <p>SIGGRPAH Student Volunteer</p>
+      </section>
 
-    <!-- Resume Section -->
-    <section id="Resume">
-      <h2>Resume</h2>
-      <p></p>
-    </section>
+      <hr />
+  
+      <!-- Resume Section -->
+      <section id="Resume">
+        <h2>Resume</h2>
+        <a href="/src/jamesony.pdf"><img src="/resumescreenshot.jpg"></img></a>
+      </section>
 
-    <!-- Contact Section -->
-    <section id="contact">
-      <h2>Contact Me</h2>
-      <p>
-        Interested in collaborating or just want to say hi? Reach out to me at
-        <a href="mailto:jameson123.yee@gmail.com">jameson.yee@gmail.com</a>.
-      </p>
-      <p>
-        You can also connect with me on
-        <a href="https://www.linkedin.com/in/jamesonyee/">LinkedIn</a>.
-      </p>
-    </section>
+      <hr />
+
+      <!-- Contact Section -->
+      <footer>
+        <p>
+          <a href="https://www.linkedin.com/in/jamesonyee/">
+            <i class="fa fa-linkedin-square" style="font-size: 48px"></i>
+          </a>
+          <a href="https://github.com/jamesonyee">
+            <i class="fa fa-github-square" style="font-size: 48px"> </i>
+          </a>
+        </p>
+      </footer>
+    </main>
+    
   </body>
 </html>

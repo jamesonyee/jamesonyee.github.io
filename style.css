@@ -7,3 +7,76 @@ h2,
 h3 {
   font-family: "Roboto Slab";
 }
+
+/* Sidebar navigation */
+nav {
+  width: 150px; /* Fixed width for the sidebar */
+  height: 100vh; /* Full height of the viewport */
+  position: fixed; /* Sticks to the left side of the screen */
+  top: 0; /* Aligns it to the top of the screen */
+  left: 0; /* Aligns it to the left */
+  background-color: #f0f0f0; /* Background color of the sidebar */
+  padding: 20px; /* Some padding for the content inside */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow to separate the nav from the content */
+}
+
+nav ul {
+  list-style-type: none; /* Removes default bullet points */
+  padding: 0; /* Removes default padding */
+}
+
+nav li {
+  margin-bottom: 20px; /* Spacing between nav items */
+}
+
+nav li a {
+  text-decoration: none;
+  color: #000; /* Link color */
+  font-size: 18px; /* Adjust link font size */
+  display: block; /* Ensures the whole link area is clickable */
+  padding: 10px 0; /* Adds padding to the link */
+}
+
+/* Main content styling */
+main {
+  margin-left: 200px; /* Leaves space for the fixed navbar */
+  padding: 20px; /* Adds padding to the main content */
+}
+
+.edu-container {
+  display: flex;
+  align-items: center; /* Aligns OSU logo and text vertically */
+}
+
+/* OSU logo styling */
+.osu-logo img {
+  width: 90%; /* Adjust as needed */
+  height: auto;
+  padding-right: 10px; /* Space between logo and text */
+}
+
+footer a {
+  text-decoration: none;
+  color: #000;
+}
+
+#Resume img {
+  width: 20%;
+  height: auto;
+}
+
+nav {
+  float: left;
+}
+nav ul {
+  list-style: none;
+}
+
+nav li a {
+  color: #000;
+  text-decoration: none;
+}
+
+main {
+  float: inline-end;
+}
