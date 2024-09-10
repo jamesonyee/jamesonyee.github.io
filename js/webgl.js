@@ -195,7 +195,7 @@ async function initWebGL() {
   );
 
   const viewMatrix = glMatrix.mat4.create();
-  glMatrix.mat4.lookAt(viewMatrix, [0, 50, 225], [0, -20, 0], [0, 1, 0]);
+  glMatrix.mat4.lookAt(viewMatrix, [0, 50, 225], [0, -10, 0], [0, 1, 0]);
 
   const projectionMatrixLocation = gl.getUniformLocation(
     shaderProgram,
@@ -211,6 +211,7 @@ async function initWebGL() {
 
   // Get uniform locations
   const timeScaleLocation = gl.getUniformLocation(shaderProgram, "uTimeScale");
+  const timerLocation = gl.getUniformLocation(shaderProgram, "Timer");
   const amp0Location = gl.getUniformLocation(shaderProgram, "uAmp0");
   const propAng0Location = gl.getUniformLocation(shaderProgram, "uPropAng0");
   const density0Location = gl.getUniformLocation(shaderProgram, "uDensity0");
@@ -275,8 +276,14 @@ async function initWebGL() {
     const currentTime = Date.now();
     const elapsedTime = (currentTime - startTime) / 1000; // in seconds
 
-    // Update Timer uniform
-    gl.uniform1f(timeScaleLocation, elapsedTime);
+    //console.log("==currentTime", currentTime);
+    //console.log("==elapsedTime", elapsedTime);
+
+    // Set the Timer uniform
+    gl.uniform1f(timerLocation, elapsedTime);
+
+    // Use the slider value to scale the wave speed
+    gl.uniform1f(timeScaleLocation, parseFloat(timeScaleSlider.value));
 
     // Clear canvas and draw the grid
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);

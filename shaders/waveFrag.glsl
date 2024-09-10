@@ -1,7 +1,14 @@
 #version 300 es
 precision highp float;
+
 in vec3 vNormal;
 in vec3 vPosition;
+
+//Lighting
+in vec3 vNs; // normal vector
+in vec3 vLs; // vector from point to light
+in vec3 vEs; // vector from point to eye
+
 out vec4 fragColor;
 
 void main(void) {

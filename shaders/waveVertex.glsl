@@ -5,13 +5,18 @@ in vec3 aVertexNormal;
 
 uniform mat4 uProjectionMatrix;
 uniform mat4 uViewMatrix;
-uniform float uTimeScale;
-uniform float Timer;  // Added this to match OpenGL shader
+uniform float uTimeScale; // Speed multiplier from slider
+uniform float Timer;      // Elapsed time for animation
+
+
 
 // Wave 1
 uniform float uAmp0;
 uniform float uPropAng0;
 uniform float uDensity0;
+
+//Lighting
+uniform float uLightX, uLightY, uLightZ;
 
 uniform vec3 uLightPosition;
 
@@ -38,14 +43,9 @@ void main(void) {
     // Final vertex position
     vec3 newVertex = vec3(newx, newy, newz);
 
-    // Normal calculation
-    vec3 dxda = vec3(1.0, 0.0, 0.0);
-    vec3 dxdb = vec3(0.0, 0.0, 1.0);
-    vec3 ta = cross(dxdb, dxda);
-    vec3 tb = vec3(0.0, 0.0, 0.0);
-    vNormal = normalize(cross(ta, tb));
-
     vPosition = newVertex;
+
+	vec3 eyeLightPosition = vec3 (uLightX, uLightY, uLightZ);
 
     gl_Position = uProjectionMatrix * uViewMatrix * vec4(newVertex, 1.0);
 }
