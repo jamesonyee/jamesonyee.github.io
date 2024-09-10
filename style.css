@@ -1,3 +1,8 @@
+header {
+  position: relative;
+  z-index: 10; /* Ensure it's above the sidebar */
+}
+
 body {
   font-family: "PT Sans", sans-serif;
 }
@@ -8,16 +13,54 @@ h3 {
   font-family: "Roboto Slab";
 }
 
-/* Sidebar navigation */
-nav {
-  width: 150px; /* Fixed width for the sidebar */
-  height: 100vh; /* Full height of the viewport */
-  position: fixed; /* Sticks to the left side of the screen */
-  top: 0; /* Aligns it to the top of the screen */
-  left: 0; /* Aligns it to the left */
-  background-color: #f0f0f0; /* Background color of the sidebar */
-  padding: 20px; /* Some padding for the content inside */
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow to separate the nav from the content */
+#sidebar {
+  width: 150px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #f0f0f0;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transform: translateX(-200px); /* Initially hidden */
+  transition: transform 0.3s ease-in-out;
+  z-index: 5;
+}
+
+#sidebar.open {
+  transform: translateX(0); /* Slide in when open */
+}
+
+/* Adjust the main content area for sidebar toggle */
+main {
+  padding: 20px; /* Adds padding to the main content */
+}
+
+#content-wrapper {
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(0); /* Default position */
+  margin-right: 700px;
+  margin-left: 50px;
+}
+
+#content-wrapper.sidebar-open {
+  transform: translateX(
+    150px
+  ); /* Move content to the right when sidebar opens */
+}
+
+#hamburger,
+#close-button {
+  position: fixed;
+  top: 20px;
+  left: 20px; /* Place both buttons at the same spot */
+  font-size: 24px;
+  cursor: pointer;
+  color: #000;
+}
+
+#close-button {
+  display: none; /* Hide initially */
 }
 
 nav ul {
@@ -27,6 +70,7 @@ nav ul {
 
 nav li {
   margin-bottom: 20px; /* Spacing between nav items */
+  position: relative;
 }
 
 nav li a {
@@ -34,13 +78,26 @@ nav li a {
   color: #000; /* Link color */
   font-size: 18px; /* Adjust link font size */
   display: block; /* Ensures the whole link area is clickable */
-  padding: 10px 0; /* Adds padding to the link */
+  padding: 0px 0; /* Adds padding to the link */
 }
 
-/* Main content styling */
-main {
-  margin-left: 200px; /* Leaves space for the fixed navbar */
-  padding: 20px; /* Adds padding to the main content */
+.sub-menu {
+  display: none;
+  list-style-type: none;
+  padding-left: 10px; /* Indent the sub-menu */
+}
+
+nav li:hover .sub-menu {
+  display: block;
+}
+
+.sub-menu li {
+  margin-bottom: 10px;
+}
+
+.sub-menu li a {
+  font-size: 16px;
+  padding: 5px 0;
 }
 
 .edu-container {
