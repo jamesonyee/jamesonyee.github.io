@@ -139,8 +139,8 @@ async function initWebGL() {
   }
 
   //Set up buffers
-  const gridSize = 200;
-  const gridDivisions = 200;
+  const gridSize = 300;
+  const gridDivisions = 300;
   const gridVertices = createGrid(gridSize, gridDivisions);
 
   const gridBuffer = gl.createBuffer();
@@ -195,7 +195,7 @@ async function initWebGL() {
   );
 
   const viewMatrix = glMatrix.mat4.create();
-  glMatrix.mat4.lookAt(viewMatrix, [0, 50, 225], [0, -10, 0], [0, 1, 0]);
+  glMatrix.mat4.lookAt(viewMatrix, [0, 50, 250], [0, 10, -100], [0, 1, 0]);
 
   const projectionMatrixLocation = gl.getUniformLocation(
     shaderProgram,
@@ -210,6 +210,7 @@ async function initWebGL() {
   gl.uniformMatrix4fv(viewMatrixLocation, false, viewMatrix);
 
   // Get uniform locations
+  const daylightLocation = gl.getUniformLocation(shaderProgram, "uDaylight");
   const timeScaleLocation = gl.getUniformLocation(shaderProgram, "uTimeScale");
   const timerLocation = gl.getUniformLocation(shaderProgram, "Timer");
   const amp0Location = gl.getUniformLocation(shaderProgram, "uAmp0");
@@ -217,18 +218,21 @@ async function initWebGL() {
   const density0Location = gl.getUniformLocation(shaderProgram, "uDensity0");
 
   // Get slider elements
+  const daylightSlider = document.getElementById("daylight");
   const timeScaleSlider = document.getElementById("timeScale");
   const amp0Slider = document.getElementById("amp0");
   const propAng0Slider = document.getElementById("propAng0");
   const density0Slider = document.getElementById("density0");
 
   // Get value display elements
+  const daylightValue = document.getElementById("daylightValue");
   const timeScaleValue = document.getElementById("timeScaleValue");
   const amp0Value = document.getElementById("amp0Value");
   const propAng0Value = document.getElementById("propAng0Value");
   const density0Value = document.getElementById("density0Value");
 
   function updateValueDisplay() {
+    daylightValue.textContent = daylightSlider.value;
     timeScaleValue.textContent = timeScaleSlider.value;
     amp0Value.textContent = amp0Slider.value;
     propAng0Value.textContent = propAng0Slider.value;
@@ -236,6 +240,8 @@ async function initWebGL() {
   }
 
   function updateUniforms() {
+    gl.uniform1f(daylightLocation, parseFloat(daylightSlider.value));
+    console.log("Daylight:", daylightSlider.value);
     gl.uniform1f(timeScaleLocation, parseFloat(timeScaleSlider.value));
     gl.uniform1f(amp0Location, parseFloat(amp0Slider.value));
     gl.uniform1f(propAng0Location, parseFloat(propAng0Slider.value));
@@ -243,6 +249,10 @@ async function initWebGL() {
   }
 
   // Add event listeners to sliders
+  daylightSlider.addEventListener("input", () => {
+    updateValueDisplay();
+    updateUniforms();
+  });
 
   timeScaleSlider.addEventListener("input", () => {
     updateValueDisplay();
