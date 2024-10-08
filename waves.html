@@ -29,7 +29,7 @@
       <span class="error-box-title">Error messages:</span>
     </div>
     -->
-    <script src="js/webgl.js"></script>
+    <script src="js/gerstner.js"></script>
     <script src="\src\gl-matrix-master\dist\gl-matrix-min.js"></script>
   </body>
 
@@ -92,7 +92,7 @@
 
     -->
     <label for="daylight">Daylight:</label>
-    <input type="range" id="daylight" min="0" max="300" value="200" />
+    <input type="range" id="daylight" min="0" max="200" step="1" value="100" />
     <span id="daylightValue">200</span><br />
 
     <label for="timeScale">Time Scale:</label>
@@ -110,7 +110,7 @@
     <span id="propAng0Value">0</span><br />
 
     <label for="density0">Density:</label>
-    <input type="range" id="density0" min="0" max="1" step="0.01" value="1" />
+    <input type="range" id="density0" min="0" max="1" step="0.01" value=".5" />
     <span id="density0Value">1</span><br />
   </div>
 </html>

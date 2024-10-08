@@ -69,16 +69,17 @@ void main(void) {
 
     vec3 ta = vec3( dxda, dyda, dzda );
 	vec3 tb = vec3( dxdb, dydb, dzdb );
-	vN = normalize(( tb, ta ) );
+	vN = normalize( uNormalMatrix * cross(tb, ta));
 
     float lightX = uDaylight;
-    float lightY = 100.0 * sin((1.0 / 300.0) * pi * lightX);
-    float lightZ = 1000.0;
+    float lightY = 1000.0 * sin((1.0 / 200.0) * pi * lightX);
+    float lightZ = 0.;
 
 	vec3 eyeLightPosition = vec3 (lightX, lightY, lightZ);
     
     vec4 ECposition = uViewMatrix * vec4( newVertex, 1.);
     vL = normalize( eyeLightPosition - ECposition.xyz);                             // vector from the point
                                                                                     // to the light position
-    gl_Position = uProjectionMatrix * uViewMatrix * vec4(newVertex, 1.0);           // vector from the point
+    vE = normalize( vec3(0., 0., 0.) - ECposition.xyz );                             // vector from the point                                                    
+    gl_Position = uProjectionMatrix * uViewMatrix * vec4(newVertex, 1.0);           
 }

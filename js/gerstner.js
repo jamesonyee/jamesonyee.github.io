@@ -9,7 +9,9 @@ function showError(errorText) {
 async function loadShader(gl, type, url) {
   const response = await fetch(url);
   if (!response.ok) {
-    showError(`Failed to fetch shader source from ${url}`);
+    showError(
+      `Failed to fetch shader source from ${url}: ${response.statusText}`
+    );
     return null;
   }
 
@@ -38,67 +40,44 @@ async function loadShader(gl, type, url) {
   return shader;
 }
 
-function createGrid(size, divisions) {
-  const halfSize = size / 2;
-  const step = size / divisions;
-  const vertices = [];
-  const indices = [];
-
-  for (let i = 0; i < divisions; i++) {
-    for (let j = 0; j < divisions; j++) {
-      const x0 = -halfSize + i * step;
-      const z0 = -halfSize + j * step;
-      const x1 = -halfSize + (i + 1) * step;
-      const z1 = -halfSize + (j + 1) * step;
-
-      // Quad 1
-      vertices.push(x0, 0, z0);
-      vertices.push(x1, 0, z0);
-      vertices.push(x0, 0, z1);
-
-      // Quad 2
-      vertices.push(x1, 0, z0);
-      vertices.push(x1, 0, z1);
-      vertices.push(x0, 0, z1);
-    }
-  }
-
-  return new Float32Array(vertices);
-}
-
 function createGridWithNormals(size, divisions) {
   const halfSize = size / 2;
   const step = size / divisions;
   const vertices = [];
+  const normals = [];
+  const indices = [];
 
-  for (let i = 0; i < divisions; i++) {
-    for (let j = 0; j < divisions; j++) {
-      const x0 = -halfSize + i * step;
-      const z0 = -halfSize + j * step;
-      const x1 = -halfSize + (i + 1) * step;
-      const z1 = -halfSize + (j + 1) * step;
-
-      // Quad 1
-      vertices.push(x0, 0, z0, 0, 1, 0);
-      vertices.push(x1, 0, z0, 0, 1, 0);
-      vertices.push(x0, 0, z1, 0, 1, 0);
-
-      // Quad 2
-      vertices.push(x1, 0, z0, 0, 1, 0);
-      vertices.push(x1, 0, z1, 0, 1, 0);
-      vertices.push(x0, 0, z1, 0, 1, 0);
+  for (let j = 0; j <= divisions; j++) {
+    for (let i = 0; i <= divisions; i++) {
+      const x = -halfSize + i * step;
+      const z = -halfSize + j * step;
+      vertices.push(x, 0, z);
+      normals.push(0, 1, 0);
     }
   }
 
-  return new Float32Array(vertices);
+  for (let j = 0; j < divisions; j++) {
+    for (let i = 0; i < divisions; i++) {
+      const topLeft = j * (divisions + 1) + i;
+      const topRight = topLeft + 1;
+      const bottomLeft = topLeft + (divisions + 1);
+      const bottomRight = bottomLeft + 1;
+      indices.push(topLeft, bottomLeft, topRight);
+      indices.push(topRight, bottomLeft, bottomRight);
+    }
+  }
+
+  return {
+    vertices: new Float32Array(vertices),
+    normals: new Float32Array(normals),
+    indices: new Uint32Array(indices),
+  };
 }
 
 async function initWebGL() {
   const canvas = document.getElementById("glCanvas");
   if (!canvas) {
-    showError(
-      "Cannot get canvas reference - check for typos or loading script too early in HTML"
-    );
+    showError("Cannot get canvas reference.");
     return;
   }
 
@@ -108,25 +87,21 @@ async function initWebGL() {
     return;
   }
 
-  // Set canvas size
   canvas.width = canvas.clientWidth;
   canvas.height = canvas.clientHeight;
 
-  // Load shaders
-  const vertexShaderUrl = "shaders/waveVertex.glsl";
-  const fragmentShaderUrl = "shaders/waveFrag.glsl";
-
-  const vertexShader = await loadShader(gl, gl.VERTEX_SHADER, vertexShaderUrl);
+  const vertexShader = await loadShader(
+    gl,
+    gl.VERTEX_SHADER,
+    "shaders/waveVertex.glsl"
+  );
   const fragmentShader = await loadShader(
     gl,
     gl.FRAGMENT_SHADER,
-    fragmentShaderUrl
+    "shaders/waveFrag.glsl"
   );
 
-  if (!vertexShader || !fragmentShader) {
-    showError("Failed to load shaders");
-    return;
-  }
+  if (!vertexShader || !fragmentShader) return;
 
   const shaderProgram = gl.createProgram();
   gl.attachShader(shaderProgram, vertexShader);
@@ -138,16 +113,20 @@ async function initWebGL() {
     return;
   }
 
-  //Set up buffers
-  const gridSize = 300;
-  const gridDivisions = 300;
-  const gridVertices = createGrid(gridSize, gridDivisions);
+  const gridVertices = createGridWithNormals(200, 200);
 
-  const gridBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, gridBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, gridVertices, gl.STATIC_DRAW);
+  const vertexBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, gridVertices.vertices, gl.STATIC_DRAW);
 
-  // Get attribute location
+  const normalBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, gridVertices.normals, gl.STATIC_DRAW);
+
+  const indexBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, gridVertices.indices, gl.STATIC_DRAW);
+
   const positionAttribLocation = gl.getAttribLocation(
     shaderProgram,
     "aVertexPosition"
@@ -157,59 +136,54 @@ async function initWebGL() {
     "aVertexNormal"
   );
 
-  // Bind buffer and assign attributes
-  gl.bindBuffer(gl.ARRAY_BUFFER, gridBuffer);
-  gl.vertexAttribPointer(
-    positionAttribLocation,
-    3,
-    gl.FLOAT,
-    false,
-    6 * Float32Array.BYTES_PER_ELEMENT,
-    0
-  );
-  gl.vertexAttribPointer(
-    normalAttribLocation,
-    3,
-    gl.FLOAT,
-    false,
-    6 * Float32Array.BYTES_PER_ELEMENT,
-    3 * Float32Array.BYTES_PER_ELEMENT
-  );
+  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+  gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(positionAttribLocation);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+  gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(normalAttribLocation);
 
-  //Set up viewport and clear color
   gl.viewport(0, 0, canvas.width, canvas.height);
   gl.clearColor(0.08, 0.08, 0.08, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
   gl.useProgram(shaderProgram);
 
   const projectionMatrix = glMatrix.mat4.create();
   glMatrix.mat4.perspective(
     projectionMatrix,
-    (45 * Math.PI) / 180, // Field of view in radians
-    canvas.width / canvas.height, // Aspect ratio
-    0.1, // Near clipping plane
-    1000.0 // Far clipping plane
+    (45 * Math.PI) / 180,
+    canvas.width / canvas.height,
+    0.1,
+    1000.0
   );
-
   const viewMatrix = glMatrix.mat4.create();
-  glMatrix.mat4.lookAt(viewMatrix, [0, 50, 250], [0, 10, -100], [0, 1, 0]);
+  glMatrix.mat4.lookAt(viewMatrix, [100, 40, 200], [-60, 0, -100], [0, 1, 0]);
 
-  const projectionMatrixLocation = gl.getUniformLocation(
-    shaderProgram,
-    "uProjectionMatrix"
+  gl.uniformMatrix4fv(
+    gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
+    false,
+    projectionMatrix
   );
-  const viewMatrixLocation = gl.getUniformLocation(
-    shaderProgram,
-    "uViewMatrix"
+  gl.uniformMatrix4fv(
+    gl.getUniformLocation(shaderProgram, "uViewMatrix"),
+    false,
+    viewMatrix
   );
 
-  gl.uniformMatrix4fv(projectionMatrixLocation, false, projectionMatrix);
-  gl.uniformMatrix4fv(viewMatrixLocation, false, viewMatrix);
+  // Calculate normal matrix (inverse transpose of modelViewMatrix, upper 3x3)
+  const normalMatrix = glMatrix.mat3.create();
+  glMatrix.mat3.fromMat4(normalMatrix, viewMatrix); // Extract the upper-left 3x3
+  glMatrix.mat3.invert(normalMatrix, normalMatrix);
+  glMatrix.mat3.transpose(normalMatrix, normalMatrix);
 
-  // Get uniform locations
+  // Pass the normal matrix to the shader
+  gl.uniformMatrix3fv(
+    gl.getUniformLocation(shaderProgram, "uNormalMatrix"),
+    false,
+    normalMatrix
+  );
+
   const daylightLocation = gl.getUniformLocation(shaderProgram, "uDaylight");
   const timeScaleLocation = gl.getUniformLocation(shaderProgram, "uTimeScale");
   const timerLocation = gl.getUniformLocation(shaderProgram, "Timer");
@@ -297,7 +271,12 @@ async function initWebGL() {
 
     // Clear canvas and draw the grid
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    gl.drawArrays(gl.LINES, 0, gridVertices.length / 3);
+    gl.drawElements(
+      gl.TRIANGLES,
+      gridVertices.indices.length,
+      gl.UNSIGNED_INT,
+      0
+    );
 
     // Request the next frame
     requestAnimationFrame(render);
