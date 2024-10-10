@@ -90,6 +90,16 @@ async function initWebGL() {
   canvas.width = canvas.clientWidth;
   canvas.height = canvas.clientHeight;
 
+  canvas.addEventListener("mousedown", onMouseDown);
+  canvas.addEventListener("mousemove", onMouseMove);
+  canvas.addEventListener("mouseup", onMouseUp);
+
+  // Ensure dragging stops when the mouse leaves the canvas
+  canvas.addEventListener("mouseleave", onMouseUp);
+
+  // Ensure dragging stops if the mouse is released outside the canvas
+  document.addEventListener("mouseup", onMouseUp);
+
   const vertexShader = await loadShader(
     gl,
     gl.VERTEX_SHADER,
@@ -113,7 +123,7 @@ async function initWebGL() {
     return;
   }
 
-  const gridVertices = createGridWithNormals(200, 200);
+  const gridVertices = createGridWithNormals(100, 100);
 
   const vertexBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
@@ -149,6 +159,67 @@ async function initWebGL() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   gl.useProgram(shaderProgram);
 
+  let isDragging = false;
+  let previousMousePosition = { x: 0, y: 0 };
+  let rotation = { x: 0, y: 0 };
+
+  // Mouse event handlers
+  function onMouseDown(event) {
+    isDragging = true;
+    previousMousePosition = { x: event.clientX, y: event.clientY };
+    console.log("Dragging");
+  }
+
+  function onMouseMove(event) {
+    if (isDragging) {
+      const deltaX = event.clientX - previousMousePosition.x;
+      const deltaY = event.clientY - previousMousePosition.y;
+
+      // Invert the direction of rotation
+      rotation.x -= deltaX * 0.002; // Invert rotation for X-axis
+      rotation.y += deltaY * 0.005; // Invert rotation for Y-axis
+
+      previousMousePosition = { x: event.clientX, y: event.clientY };
+
+      // Update the view matrix based on rotation
+      updateCameraView();
+    }
+  }
+
+  function onMouseUp() {
+    isDragging = false;
+    console.log("not dragging");
+  }
+
+  function updateCameraView() {
+    const viewMatrix = glMatrix.mat4.create();
+    const cameraPosition = [
+      200 * Math.sin(rotation.x),
+      40 + 200 * Math.sin(rotation.y),
+      125 * Math.cos(rotation.x),
+    ];
+
+    glMatrix.mat4.lookAt(viewMatrix, cameraPosition, [0, 0, 0], [0, 1, 0]);
+
+    gl.uniformMatrix4fv(
+      gl.getUniformLocation(shaderProgram, "uViewMatrix"),
+      false,
+      viewMatrix
+    );
+
+    // Update the normal matrix too, as it's dependent on the view matrix
+    const normalMatrix = glMatrix.mat3.create();
+    glMatrix.mat3.fromMat4(normalMatrix, viewMatrix);
+    glMatrix.mat3.invert(normalMatrix, normalMatrix);
+    glMatrix.mat3.transpose(normalMatrix, normalMatrix);
+
+    gl.uniformMatrix3fv(
+      gl.getUniformLocation(shaderProgram, "uNormalMatrix"),
+      false,
+      normalMatrix
+    );
+  }
+
   const projectionMatrix = glMatrix.mat4.create();
   glMatrix.mat4.perspective(
     projectionMatrix,
@@ -158,7 +229,7 @@ async function initWebGL() {
     1000.0
   );
   const viewMatrix = glMatrix.mat4.create();
-  glMatrix.mat4.lookAt(viewMatrix, [100, 40, 200], [-60, 0, -100], [0, 1, 0]);
+  glMatrix.mat4.lookAt(viewMatrix, [0, 0, 0], [0, 0, 0], [0, 1, 0]);
 
   gl.uniformMatrix4fv(
     gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
@@ -171,9 +242,8 @@ async function initWebGL() {
     viewMatrix
   );
 
-  // Calculate normal matrix (inverse transpose of modelViewMatrix, upper 3x3)
   const normalMatrix = glMatrix.mat3.create();
-  glMatrix.mat3.fromMat4(normalMatrix, viewMatrix); // Extract the upper-left 3x3
+  glMatrix.mat3.fromMat4(normalMatrix, viewMatrix);
   glMatrix.mat3.invert(normalMatrix, normalMatrix);
   glMatrix.mat3.transpose(normalMatrix, normalMatrix);
 
@@ -254,6 +324,8 @@ async function initWebGL() {
 
   // Animation loop
   let startTime = Date.now();
+
+  updateCameraView();
 
   function render() {
     // Calculate elapsed time

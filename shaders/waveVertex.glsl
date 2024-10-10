@@ -72,8 +72,8 @@ void main(void) {
 	vN = normalize( uNormalMatrix * cross(tb, ta));
 
     float lightX = uDaylight;
-    float lightY = 1000.0 * sin((1.0 / 200.0) * pi * lightX);
-    float lightZ = 0.;
+    float lightY = 1000.0 * sin((1.0 / 1000.0) * pi * lightX + .5 *pi);
+    float lightZ = -1000.;
 
 	vec3 eyeLightPosition = vec3 (lightX, lightY, lightZ);
     

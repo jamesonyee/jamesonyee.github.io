@@ -92,7 +92,14 @@
 
     -->
     <label for="daylight">Daylight:</label>
-    <input type="range" id="daylight" min="0" max="200" step="1" value="100" />
+    <input
+      type="range"
+      id="daylight"
+      min="-1000"
+      max="1000"
+      step="1"
+      value="0"
+    />
     <span id="daylightValue">200</span><br />
 
     <label for="timeScale">Time Scale:</label>
@@ -102,15 +109,29 @@
     <p>Wave 1:</p>
 
     <label for="amp0">Amplitude:</label>
-    <input type="range" id="amp0" min="0" max="1.0" step="0.01" value="0.4" />
+    <input type="range" id="amp0" min="0" max="1.0" step="0.01" value="0.75" />
     <span id="amp0Value">0.4</span><br />
 
-    <label for="propAng0">Propagation Angle:</label>
-    <input type="range" id="propAng0" min="-1" max="1" step="0.01" value="0" />
+    <label for="propAng0">Wave Angle:</label>
+    <input type="range" id="propAng0" min="-1" max="1" step="0.01" value=".5" />
     <span id="propAng0Value">0</span><br />
 
     <label for="density0">Density:</label>
-    <input type="range" id="density0" min="0" max="1" step="0.01" value=".5" />
+    <input type="range" id="density0" min="0" max="1" step="0.01" value=".25" />
     <span id="density0Value">1</span><br />
+
+    <p>Wave 2:</p>
+
+    <label for="amp1">Amplitude:</label>
+    <input type="range" id="amp1" min="0" max="1.0" step="0.01" value="0" />
+    <span id="amp1Value">0.4</span><br />
+
+    <label for="propAng1">Wave Angle:</label>
+    <input type="range" id="propAng1" min="-1" max="1" step="0.01" value="0" />
+    <span id="propAng1Value">0</span><br />
+
+    <label for="density1">Density:</label>
+    <input type="range" id="density1" min="0" max="1" step="0.01" value="0" />
+    <span id="density1Value">1</span><br />
   </div>
 </html>

@@ -11,17 +11,17 @@ in vec3 vE; // vector from point to eye
 out vec4 fragColor;
 
 void main(void) {
-  vec3 myColor = vec3(0.0, 0.0, 1.0); // Blue water color
+  vec3 myColor = vec3(0.2, 0.2, .8); // Blue water color
   vec3 specularColor = vec3(1.0, 1.0, 1.0); // White reflection color
 
   vec3 Normal = normalize(vN);
   vec3 Light = normalize(vL);
   vec3 Eye = normalize(vE);
 
-  float uKa = .5;
-  float uKs = .5;
+  float uKa = .6;
+  float uKs = .4;
   float uKd = .3;
-  float uShininess = 1000.; 
+  float uShininess = 100.; 
 
   vec3 ambient = uKa * myColor;
   
