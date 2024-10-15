@@ -14,6 +14,11 @@ uniform float uAmp0;
 uniform float uPropAng0;
 uniform float uDensity0;
 
+//Wave 2
+uniform float    uAmp1;
+uniform float    uPropAng1;
+uniform float    uDensity1;
+
 //Lighting
 uniform float uDaylight;
 
@@ -61,9 +66,28 @@ void main(void) {
 	dxdb -= uAmp0 * cos(uPropAng0) * cos(thetam) * dthetamdb;
 	dydb -= uAmp0 * sin(thetam) * dthetamdb;
 	dzdb -= uAmp0 * sin(uPropAng0) * cos(thetam) * dthetamdb;
-    
 
-    // Final vertex position
+    //Wave 2 - Vertex Displacement
+
+	float freq1 = sqrt(g * uDensity1);
+	thetam = uDensity1* cos(uPropAng1) * aVertexPosition.x + uDensity1 * sin(uPropAng1) * aVertexPosition.z - freq1 * Timer * uTimeScale;		//Where the vertext is in the circle
+	 
+	newx -= uAmp1 * cos(uPropAng1) * sin(thetam);
+	newy += uAmp1 * cos(thetam);
+	newz -= uAmp1 * sin(uPropAng1) * sin(thetam);
+
+	//Wave 2 Surface normal vector
+
+	dthetamda = uDensity1 * cos(uPropAng1);
+	dthetamdb = uDensity1 * sin(uPropAng1);
+	dxda -= uAmp1 * cos(uPropAng1) * cos(thetam) * dthetamda;
+	dyda -= uAmp1 * sin(thetam) * dthetamda;
+	dzda -= uAmp1 * sin(uPropAng1) * cos(thetam) * dthetamda;
+	dxdb -= uAmp1 * cos(uPropAng1) * cos(thetam) * dthetamdb;
+	dydb -= uAmp1 * sin(thetam) * dthetamdb;
+	dzdb -= uAmp1 * sin(uPropAng1) * cos(thetam) * dthetamdb;
+    
+    
     vec3 newVertex = vec3(newx, newy, newz);
     vMC = newVertex;
 

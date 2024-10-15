@@ -257,23 +257,38 @@ async function initWebGL() {
   const daylightLocation = gl.getUniformLocation(shaderProgram, "uDaylight");
   const timeScaleLocation = gl.getUniformLocation(shaderProgram, "uTimeScale");
   const timerLocation = gl.getUniformLocation(shaderProgram, "Timer");
+
   const amp0Location = gl.getUniformLocation(shaderProgram, "uAmp0");
   const propAng0Location = gl.getUniformLocation(shaderProgram, "uPropAng0");
   const density0Location = gl.getUniformLocation(shaderProgram, "uDensity0");
 
+  const amp1Location = gl.getUniformLocation(shaderProgram, "uAmp1");
+  const propAng1Location = gl.getUniformLocation(shaderProgram, "uPropAng1");
+  const density1Location = gl.getUniformLocation(shaderProgram, "uDensity1");
+
   // Get slider elements
   const daylightSlider = document.getElementById("daylight");
   const timeScaleSlider = document.getElementById("timeScale");
+
   const amp0Slider = document.getElementById("amp0");
   const propAng0Slider = document.getElementById("propAng0");
   const density0Slider = document.getElementById("density0");
 
+  const amp1Slider = document.getElementById("amp1");
+  const propAng1Slider = document.getElementById("propAng1");
+  const density1Slider = document.getElementById("density1");
+
   // Get value display elements
   const daylightValue = document.getElementById("daylightValue");
   const timeScaleValue = document.getElementById("timeScaleValue");
+
   const amp0Value = document.getElementById("amp0Value");
   const propAng0Value = document.getElementById("propAng0Value");
   const density0Value = document.getElementById("density0Value");
+
+  const amp1Value = document.getElementById("amp1Value");
+  const propAng1Value = document.getElementById("propAng1Value");
+  const density1Value = document.getElementById("density1Value");
 
   function updateValueDisplay() {
     daylightValue.textContent = daylightSlider.value;
@@ -281,6 +296,9 @@ async function initWebGL() {
     amp0Value.textContent = amp0Slider.value;
     propAng0Value.textContent = propAng0Slider.value;
     density0Value.textContent = density0Slider.value;
+    amp1Value.textContent = amp1Slider.value;
+    propAng1Value.textContent = propAng1Slider.value;
+    density1Value.textContent = density1Slider.value;
   }
 
   function updateUniforms() {
@@ -290,6 +308,9 @@ async function initWebGL() {
     gl.uniform1f(amp0Location, parseFloat(amp0Slider.value));
     gl.uniform1f(propAng0Location, parseFloat(propAng0Slider.value));
     gl.uniform1f(density0Location, parseFloat(density0Slider.value));
+    gl.uniform1f(amp1Location, parseFloat(amp1Slider.value));
+    gl.uniform1f(propAng1Location, parseFloat(propAng1Slider.value));
+    gl.uniform1f(density1Location, parseFloat(density1Slider.value));
   }
 
   // Add event listeners to sliders
@@ -314,6 +335,23 @@ async function initWebGL() {
   });
 
   density0Slider.addEventListener("input", () => {
+    updateValueDisplay();
+    updateUniforms();
+  });
+
+  //
+
+  amp1Slider.addEventListener("input", () => {
+    updateValueDisplay();
+    updateUniforms();
+  });
+
+  propAng1Slider.addEventListener("input", () => {
+    updateValueDisplay();
+    updateUniforms();
+  });
+
+  density1Slider.addEventListener("input", () => {
     updateValueDisplay();
     updateUniforms();
   });
