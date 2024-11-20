@@ -34,66 +34,9 @@
   </body>
 
   <div style="position: absolute; top: 10px; left: 10px; color: white">
-    <!--
-
-    <label for="ka">Ambient Reflection (Ka):</label>
-    <input type="range" id="ka" min="0" max="1" step="0.01" value="0.1" />
-    <span id="kaValue">0.1</span><br />
-
-    <label for="kd">Diffuse Reflection (Kd):</label>
-    <input type="range" id="kd" min="0" max="1" step="0.01" value="0.5" />
-    <span id="kdValue">0.5</span><br />
-
-    <label for="ks">Specular Reflection (Ks):</label>
-    <input type="range" id="ks" min="0" max="1" step="0.01" value="0.3" />
-    <span id="ksValue">0.3</span><br />
-
-    <label for="noiseAmp">Noise Amplitude:</label>
-    <input type="range" id="noiseAmp" min="0" max="5" step="0.01" value="0" />
-    <span id="noiseAmpValue">0</span><br />
-
-    <label for="noiseFreq">Noise Frequency:</label>
-    <input
-      type="range"
-      id="noiseFreq"
-      min="0.1"
-      max="20"
-      step="0.1"
-      value="1"
-    />
-    <span id="noiseFreqValue">1</span><br />
-
-    <label for="amp1">Amplitude 1:</label>
-    <input type="range" id="amp1" min="0" max="0.8" step="0.01" value="0" />
-    <span id="amp1Value">0</span><br />
-
-    <label for="propAng1">Propagation Angle 1:</label>
-    <input type="range" id="propAng1" min="-1" max="1" step="0.01" value="0" />
-    <span id="propAng1Value">0</span><br />
-
-    <label for="density1">Density 1:</label>
-    <input type="range" id="density1" min="0" max="3" step="0.1" value="1" />
-    <span id="density1Value">1</span><br />
-
-    <label for="phaseShift1">Phase Shift 1:</label>
-    <input
-      type="range"
-      id="phaseShift1"
-      min="-5"
-      max="5"
-      step="0.1"
-      value="0"
-    />
-    <span id="phaseShift1Value">0</span><br />
-
-    <label for="shininess">Shininess:</label>
-    <input type="range" id="shininess" min="1" max="200" step="1" value="2" />
-    <span id="shininessValue">2</span><br />
-
-    -->
-    <label for="daylight">Daylight:</label>
+    <label for="daylight">Lighting:</label>
     <input type="range" id="daylight" min="-500" max="500" step="1" value="0" />
-    <span id="daylightValue">200</span><br />
+    <br />
 
     <label for="timeScale">Time Scale:</label>
     <input type="range" id="timeScale" min="0" max="3" step="0.01" value="1" />
@@ -126,5 +69,14 @@
     <label for="density1">Density:</label>
     <input type="range" id="density1" min="0" max="1" step="0.01" value="0" />
     <span id="density1Value">1</span><br />
+
+    <p>Noise:</p>
+    <label for="noiseAmp">Noise Amplitude:</label>
+    <input type="range" id="noiseAmp" min="0" max="1" step="0.01" value=".1" />
+    <span id="noiseAmpValue">0</span><br />
+
+    <label for="noiseFreq">Noise Frequency:</label>
+    <input type="range" id="noiseFreq" min="0" max="1" step="0.01" value=".1" />
+    <span id="noiseFreqValue">1</span><br />
   </div>
 </html>

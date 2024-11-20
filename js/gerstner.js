@@ -74,6 +74,67 @@ function createGridWithNormals(size, divisions) {
   };
 }
 
+function sliderToTime(value) {
+  // Map the slider range (-500 to 500) to minutes in a day (0 to 1439)
+  const totalMinutes = Math.round(
+    ((value - parseFloat(slider.min)) /
+      (parseFloat(slider.max) - parseFloat(slider.min))) *
+      1440
+  );
+
+  // Calculate hours and minutes
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  // Format to 12-hour time
+  const period = hours >= 12 ? "PM" : "AM";
+  const formattedHours = hours % 12 || 12; // Convert 0 hours to 12
+  const formattedMinutes = String(minutes).padStart(2, "0");
+
+  return `${formattedHours}:${formattedMinutes} ${period}`;
+}
+
+//For reading in 3D noise texture
+async function readTexture3D(url) {
+  // Fetch the binary data from the file
+  const response = await fetch(url);
+  if (!response.ok) {
+    console.error(`Failed to load file: ${response.statusText}`);
+    return null;
+  }
+
+  // Read the response as an ArrayBuffer
+  const buffer = await response.arrayBuffer();
+  const dataView = new DataView(buffer);
+
+  // Read the texture dimensions (nums, numt, nump)
+  let offset = 0;
+  const nums = dataView.getInt32(offset, true);
+  offset += 4;
+  const numt = dataView.getInt32(offset, true);
+  offset += 4;
+  const nump = dataView.getInt32(offset, true);
+  offset += 4;
+
+  console.log(`Texture size = ${nums} x ${numt} x ${nump}`);
+
+  // Store the dimensions
+  const width = nums;
+  const height = numt;
+  const depth = nump;
+
+  // Read the texture data (assuming RGBA, 4 bytes per pixel)
+  const textureSize = 4 * nums * numt * nump;
+  const texture = new Uint8Array(buffer, offset, textureSize);
+
+  return {
+    width,
+    height,
+    depth,
+    texture,
+  };
+}
+
 async function initWebGL() {
   const canvas = document.getElementById("glCanvas");
   if (!canvas) {
@@ -254,6 +315,49 @@ async function initWebGL() {
     normalMatrix
   );
 
+  // Read the 3D noise texture
+  const noiseTextureData = await readTexture3D("../src/noise3d.064.tex");
+  if (!noiseTextureData) {
+    console.error("Failed to load 3D noise texture");
+    return;
+  }
+
+  // Create the 3D texture
+  const noiseTexture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_3D, noiseTexture);
+
+  // Upload the 3D noise texture data
+  gl.texImage3D(
+    gl.TEXTURE_3D, // Target
+    0, // Level (mipmap)
+    gl.RGBA, // Internal format
+    noiseTextureData.width, // Width
+    noiseTextureData.height, // Height
+    noiseTextureData.depth, // Depth
+    0, // Border
+    gl.RGBA, // Format of the pixel data
+    gl.UNSIGNED_BYTE, // Data type
+    noiseTextureData.texture // Pixel data
+  );
+
+  // Set texture parameters
+  gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+  gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+  gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_R, gl.REPEAT);
+
+  // Bind the texture to a uniform
+  const noiseTextureLocation = gl.getUniformLocation(
+    shaderProgram,
+    "uNoiseTexture"
+  );
+  gl.uniform1i(noiseTextureLocation, 0); // texture unit 0
+
+  // Use texture unit 0 for our 3D texture
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_3D, noiseTexture);
+
   const daylightLocation = gl.getUniformLocation(shaderProgram, "uDaylight");
   const timeScaleLocation = gl.getUniformLocation(shaderProgram, "uTimeScale");
   const timerLocation = gl.getUniformLocation(shaderProgram, "Timer");
@@ -265,6 +369,9 @@ async function initWebGL() {
   const amp1Location = gl.getUniformLocation(shaderProgram, "uAmp1");
   const propAng1Location = gl.getUniformLocation(shaderProgram, "uPropAng1");
   const density1Location = gl.getUniformLocation(shaderProgram, "uDensity1");
+
+  const NoiseAmpLocation = gl.getUniformLocation(shaderProgram, "uNoiseAmp");
+  const NoiseFreqLocation = gl.getUniformLocation(shaderProgram, "uNoiseFreq");
 
   // Get slider elements
   const daylightSlider = document.getElementById("daylight");
@@ -278,6 +385,9 @@ async function initWebGL() {
   const propAng1Slider = document.getElementById("propAng1");
   const density1Slider = document.getElementById("density1");
 
+  const noiseAmpSlider = document.getElementById("noiseAmp");
+  const noiseFreqSlider = document.getElementById("noiseFreq");
+
   // Get value display elements
   const daylightValue = document.getElementById("daylightValue");
   const timeScaleValue = document.getElementById("timeScaleValue");
@@ -290,8 +400,11 @@ async function initWebGL() {
   const propAng1Value = document.getElementById("propAng1Value");
   const density1Value = document.getElementById("density1Value");
 
+  const noiseAmpValue = document.getElementById("noiseAmpValue");
+  const noiseFreqValue = document.getElementById("noiseFreqValue");
+
   function updateValueDisplay() {
-    daylightValue.textContent = daylightSlider.value;
+    //daylightValue.textContent = daylightSlider.value;
     timeScaleValue.textContent = timeScaleSlider.value;
     amp0Value.textContent = amp0Slider.value;
     propAng0Value.textContent = propAng0Slider.value;
@@ -299,6 +412,8 @@ async function initWebGL() {
     amp1Value.textContent = amp1Slider.value;
     propAng1Value.textContent = propAng1Slider.value;
     density1Value.textContent = density1Slider.value;
+    noiseAmpValue.textContent = noiseAmpSlider.value;
+    noiseFreqValue.textContent = noiseFreqSlider.value;
   }
 
   function updateUniforms() {
@@ -311,6 +426,8 @@ async function initWebGL() {
     gl.uniform1f(amp1Location, parseFloat(amp1Slider.value));
     gl.uniform1f(propAng1Location, parseFloat(propAng1Slider.value));
     gl.uniform1f(density1Location, parseFloat(density1Slider.value));
+    gl.uniform1f(NoiseAmpLocation, parseFloat(noiseAmpSlider.value));
+    gl.uniform1f(NoiseFreqLocation, parseFloat(noiseFreqSlider.value));
   }
 
   // Add event listeners to sliders
@@ -352,6 +469,16 @@ async function initWebGL() {
   });
 
   density1Slider.addEventListener("input", () => {
+    updateValueDisplay();
+    updateUniforms();
+  });
+
+  noiseAmpSlider.addEventListener("input", () => {
+    updateValueDisplay();
+    updateUniforms();
+  });
+
+  noiseFreqSlider.addEventListener("input", () => {
     updateValueDisplay();
     updateUniforms();
   });
