@@ -74,26 +74,6 @@ function createGridWithNormals(size, divisions) {
   };
 }
 
-function sliderToTime(value) {
-  // Map the slider range (-500 to 500) to minutes in a day (0 to 1439)
-  const totalMinutes = Math.round(
-    ((value - parseFloat(slider.min)) /
-      (parseFloat(slider.max) - parseFloat(slider.min))) *
-      1440
-  );
-
-  // Calculate hours and minutes
-  const hours = Math.floor(totalMinutes / 60);
-  const minutes = totalMinutes % 60;
-
-  // Format to 12-hour time
-  const period = hours >= 12 ? "PM" : "AM";
-  const formattedHours = hours % 12 || 12; // Convert 0 hours to 12
-  const formattedMinutes = String(minutes).padStart(2, "0");
-
-  return `${formattedHours}:${formattedMinutes} ${period}`;
-}
-
 //For reading in 3D noise texture
 async function readTexture3D(url) {
   // Fetch the binary data from the file
@@ -210,10 +190,6 @@ async function initWebGL() {
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
   gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(positionAttribLocation);
-
-  gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-  gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(normalAttribLocation);
 
   gl.viewport(0, 0, canvas.width, canvas.height);
   gl.clearColor(0.08, 0.08, 0.08, 1.0);

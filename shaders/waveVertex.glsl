@@ -89,7 +89,7 @@ void main(void) {
     
     
     vec3 newVertex = vec3(newx, newy, newz);
-    vMC = newVertex;
+    vMC = newVertex.xyz;
 
     vec3 ta = vec3( dxda, dyda, dzda );
 	vec3 tb = vec3( dxdb, dydb, dzdb );
