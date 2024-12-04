@@ -3,145 +3,231 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Slab:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="styles/homepage.css" />
+    <script src="/js/sidebar.js"></script>
     <title>WebGL Wave Simulation</title>
-    <style>
-      body,
-      html {
-        margin: 0;
-        overflow: hidden;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #2a2a2a;
-      }
-      canvas {
-        width: 100%;
-        height: 100%;
-        background-color: #ff0000;
-      }
-    </style>
   </head>
+
   <body>
-    <canvas id="glCanvas"></canvas>
-    <script src="js/gerstner.js"></script>
-    <script src="\src\gl-matrix-master\dist\gl-matrix-min.js"></script>
+    <header>
+      <i class="fa fa-bars" id="hamburger" aria-hidden="true"></i>
+      <nav id="sidebar">
+        <i class="fa fa-times" id="close-button" aria-hidden="true"></i>
+        <br />
+        <ul>
+          <li>
+            <a href="/">Home</a>
+            <ul class="sub-menu">
+              <li><a href="/#introduction">Introduction</a></li>
+              <li><a href="/#skills">Interests</a></li>
+              <li><a href="/#edu">Education</a></li>
+              <li><a href="/#exp">Experience</a></li>
+              <li><a href="/#Resume">Resume</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#">Projects</a>
+            <ul class="sub-menu">
+              <li><a href="/waves.html">Wave Simulation</a></li>
+              <li><a href="#">Project 2</a></li>
+              <li><a href="#">Project 3</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div id="content-wrapper">
+      <div id="canvas-container">
+        <link rel="stylesheet" href="styles/wave.css" />
+
+        <button id="fullscreen-btn">Fullscreen</button>
+        <canvas id="glCanvas"></canvas>
+
+        <script src="js/waves.js"></script>
+        <script src="\src\gl-matrix-master\dist\gl-matrix-min.js"></script>
+
+        <div style="position: absolute; top: 10px; left: 10px; color: white">
+          <!-- Lighting Section -->
+          <details>
+            <summary>Lighting</summary>
+            <label for="daylight">Daylight:</label>
+            <input
+              type="range"
+              id="daylight"
+              min="-500"
+              max="500"
+              step="1"
+              value="0"
+            />
+          </details>
+
+          <!-- Time Scale Section -->
+          <details>
+            <summary>Wave speed</summary>
+            <label for="timeScale">Time Scale:</label>
+            <input
+              type="range"
+              id="timeScale"
+              min="0"
+              max="3"
+              step="0.01"
+              value="1"
+            />
+            <span id="timeScaleValue">1</span>
+          </details>
+
+          <!-- Water Settings Section -->
+          <details>
+            <summary>Water Settings</summary>
+            <label for="noiseAmp">Noise Amplitude:</label>
+            <input
+              type="range"
+              id="noiseAmp"
+              min="0"
+              max="1"
+              step="0.01"
+              value="0.1"
+            />
+            <span id="noiseAmpValue">0</span><br />
+
+            <label for="noiseFreq">Noise Frequency:</label>
+            <input
+              type="range"
+              id="noiseFreq"
+              min="0"
+              max="0.15"
+              step="0.001"
+              value="0.1"
+            />
+            <span id="noiseFreqValue">1</span>
+          </details>
+
+          <!-- Wave 1 Section -->
+          <details>
+            <summary>Wave 1</summary>
+            <label for="amp0">Amplitude:</label>
+            <input
+              type="range"
+              id="amp0"
+              min="0"
+              max="1.0"
+              step="0.01"
+              value="0.75"
+            />
+            <span id="amp0Value">0.4</span><br />
+
+            <label for="propAng0">Wave Angle:</label>
+            <input
+              type="range"
+              id="propAng0"
+              min="-1"
+              max="1"
+              step="0.01"
+              value="0.5"
+            />
+            <span id="propAng0Value">0</span><br />
+
+            <label for="density0">Density:</label>
+            <input
+              type="range"
+              id="density0"
+              min="0"
+              max="1"
+              step="0.01"
+              value="0.25"
+            />
+            <span id="density0Value">1</span>
+          </details>
+
+          <!-- Wave 2 Section -->
+          <details>
+            <summary>Wave 2</summary>
+            <label for="amp1">Amplitude:</label>
+            <input
+              type="range"
+              id="amp1"
+              min="0"
+              max="1.0"
+              step="0.01"
+              value="0"
+            />
+            <span id="amp1Value">0.4</span><br />
+
+            <label for="propAng1">Wave Angle:</label>
+            <input
+              type="range"
+              id="propAng1"
+              min="-1"
+              max="1"
+              step="0.01"
+              value="0"
+            />
+            <span id="propAng1Value">0</span><br />
+
+            <label for="density1">Density:</label>
+            <input
+              type="range"
+              id="density1"
+              min="0"
+              max="1"
+              step="0.01"
+              value="0"
+            />
+            <span id="density1Value">1</span>
+          </details>
+        </div>
+      </div>
+      <div id="writeup">
+        <h1>Overview</h1>
+        <p>
+          This WebGL project features a dynamic wave animation enhanced by a
+          fragment shader to give the water a more realistic interation with the
+          lighting. The wave simulation is based on the equation for trochoidal
+          motion, commonly known as Gerstner waves. This approach, rooted in
+          fluid dynamics, is derived from the Euler equations and accurately
+          models the periodic motion of fluid particles in a wave.
+        </p>
+
+        <h1>Core Functions</h1>
+
+        <pre><code>
+function render() {
+  resizeCanvas();
+
+  const currentTime = Date.now();
+  const elapsedTime = (currentTime - startTime) / 1000; // in seconds
+
+  gl.uniform1f(timerLocation, elapsedTime);
+
+  gl.uniform1f(timeScaleLocation, parseFloat(timeScaleSlider.value));
+
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  gl.drawElements(
+    gl.TRIANGLES,
+    gridVertices.indices.length,
+    gl.UNSIGNED_INT,
+    0
+  );
+
+  requestAnimationFrame(render);
+}
+      </div>
+    </div>
   </body>
-
-  <div style="position: absolute; top: 10px; left: 10px; color: white">
-    <!-- Lighting Section -->
-    <details>
-      <summary>Lighting</summary>
-      <label for="daylight">Daylight:</label>
-      <input
-        type="range"
-        id="daylight"
-        min="-500"
-        max="500"
-        step="1"
-        value="0"
-      />
-    </details>
-
-    <!-- Time Scale Section -->
-    <details>
-      <summary>Wave speed</summary>
-      <label for="timeScale">Time Scale:</label>
-      <input
-        type="range"
-        id="timeScale"
-        min="0"
-        max="3"
-        step="0.01"
-        value="1"
-      />
-      <span id="timeScaleValue">1</span>
-    </details>
-
-    <!-- Water Settings Section -->
-    <details>
-      <summary>Water Settings</summary>
-      <label for="noiseAmp">Noise Amplitude:</label>
-      <input
-        type="range"
-        id="noiseAmp"
-        min="0"
-        max="1"
-        step="0.01"
-        value="0.1"
-      />
-      <span id="noiseAmpValue">0</span><br />
-
-      <label for="noiseFreq">Noise Frequency:</label>
-      <input
-        type="range"
-        id="noiseFreq"
-        min="0"
-        max="0.15"
-        step="0.001"
-        value="0.1"
-      />
-      <span id="noiseFreqValue">1</span>
-    </details>
-
-    <!-- Wave 1 Section -->
-    <details>
-      <summary>Wave 1</summary>
-      <label for="amp0">Amplitude:</label>
-      <input
-        type="range"
-        id="amp0"
-        min="0"
-        max="1.0"
-        step="0.01"
-        value="0.75"
-      />
-      <span id="amp0Value">0.4</span><br />
-
-      <label for="propAng0">Wave Angle:</label>
-      <input
-        type="range"
-        id="propAng0"
-        min="-1"
-        max="1"
-        step="0.01"
-        value="0.5"
-      />
-      <span id="propAng0Value">0</span><br />
-
-      <label for="density0">Density:</label>
-      <input
-        type="range"
-        id="density0"
-        min="0"
-        max="1"
-        step="0.01"
-        value="0.25"
-      />
-      <span id="density0Value">1</span>
-    </details>
-
-    <!-- Wave 2 Section -->
-    <details>
-      <summary>Wave 2</summary>
-      <label for="amp1">Amplitude:</label>
-      <input type="range" id="amp1" min="0" max="1.0" step="0.01" value="0" />
-      <span id="amp1Value">0.4</span><br />
-
-      <label for="propAng1">Wave Angle:</label>
-      <input
-        type="range"
-        id="propAng1"
-        min="-1"
-        max="1"
-        step="0.01"
-        value="0"
-      />
-      <span id="propAng1Value">0</span><br />
-
-      <label for="density1">Density:</label>
-      <input type="range" id="density1" min="0" max="1" step="0.01" value="0" />
-      <span id="density1Value">1</span>
-    </details>
-  </div>
 </html>

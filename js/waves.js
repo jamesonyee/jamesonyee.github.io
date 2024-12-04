@@ -5,7 +5,25 @@ function showError(errorText) {
   errorBox.appendChild(errorTextElement);
   console.error(errorText);
 }
-
+function toggleFullscreen(element) {
+  if (!document.fullscreenElement) {
+    if (element.requestFullscreen) {
+      element.requestFullscreen();
+    } else if (element.webkitRequestFullscreen) {
+      element.webkitRequestFullscreen();
+    } else if (element.msRequestFullscreen) {
+      element.msRequestFullscreen();
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+  }
+}
 async function loadShader(gl, type, url) {
   const response = await fetch(url);
   if (!response.ok) {
@@ -117,19 +135,39 @@ async function readTexture3D(url) {
 
 async function initWebGL() {
   const canvas = document.getElementById("glCanvas");
+  const fullscreenBtn = document.getElementById("fullscreen-btn");
+  const canvasContainer = document.getElementById("canvas-container");
+
   if (!canvas) {
     showError("Cannot get canvas reference.");
     return;
   }
 
+  // Initialize WebGL2 context
   const gl = canvas.getContext("webgl2");
   if (!gl) {
     showError("This browser does not support WebGL 2");
     return;
   }
 
-  canvas.width = canvas.clientWidth;
-  canvas.height = canvas.clientHeight;
+  // Add fullscreen toggle functionality
+  fullscreenBtn.addEventListener("click", () =>
+    toggleFullscreen(canvasContainer)
+  );
+
+  // Resize canvas to match display size
+  function resizeCanvas() {
+    const displayWidth = canvas.clientWidth;
+    const displayHeight = canvas.clientHeight;
+
+    if (canvas.width !== displayWidth || canvas.height !== displayHeight) {
+      canvas.width = displayWidth;
+      canvas.height = displayHeight;
+
+      // Update WebGL viewport
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    }
+  }
 
   canvas.addEventListener("mousedown", onMouseDown);
   canvas.addEventListener("mousemove", onMouseMove);
@@ -469,6 +507,7 @@ async function initWebGL() {
   updateCameraView();
 
   function render() {
+    resizeCanvas();
     // Calculate elapsed time
     const currentTime = Date.now();
     const elapsedTime = (currentTime - startTime) / 1000; // in seconds

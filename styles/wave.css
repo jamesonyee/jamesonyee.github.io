@@ -1,0 +1,44 @@
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+#canvas-container {
+  position: relative;
+  width: 100vh;
+  height: auto; /* Height will be determined by the aspect ratio */
+  background-color: black;
+
+  /* Maintain a 16:9 aspect ratio */
+  aspect-ratio: 16 / 9;
+
+  /* Ensure it's always at the top */
+  margin: 0;
+  top: 20px;
+  left: 20px;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#fullscreen-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+}
+
+#writeup {
+  padding: 20px;
+  flex-grow: 1; /* Makes it take up remaining space */
+  overflow-y: auto;
+}
