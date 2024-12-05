@@ -39,6 +39,6 @@ canvas {
 
 #writeup {
   padding: 20px;
-  flex-grow: 1; /* Makes it take up remaining space */
+  width: 100vh; /* Makes it take up remaining space */
   overflow-y: auto;
 }

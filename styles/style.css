@@ -104,3 +104,7 @@ nav li:hover .sub-menu {
   display: flex;
   align-items: center; /* Aligns OSU logo and text vertically */
 }
+
+p {
+  font-size: 18px;
+}

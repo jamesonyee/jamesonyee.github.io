@@ -15,9 +15,19 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.css"
+    />
+
     <link rel="stylesheet" href="styles/style.css" />
     <link rel="stylesheet" href="styles/homepage.css" />
     <script src="/js/sidebar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
     <title>WebGL Wave Simulation</title>
   </head>
 
@@ -204,29 +214,39 @@
           models the periodic motion of fluid particles in a wave.
         </p>
 
-        <h1>Core Functions</h1>
-
-        <pre><code>
+        <h1>Key Components</h1>
+        <h2>1. Render loop</h2>
+        <pre><code class="hljs language-javascript">
 function render() {
-  resizeCanvas();
+resizeCanvas();
 
-  const currentTime = Date.now();
-  const elapsedTime = (currentTime - startTime) / 1000; // in seconds
+const currentTime = Date.now();
+const elapsedTime = (currentTime - startTime) / 1000; // in seconds
 
-  gl.uniform1f(timerLocation, elapsedTime);
+gl.uniform1f(timerLocation, elapsedTime);
 
-  gl.uniform1f(timeScaleLocation, parseFloat(timeScaleSlider.value));
+gl.uniform1f(timeScaleLocation, parseFloat(timeScaleSlider.value));
 
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  gl.drawElements(
-    gl.TRIANGLES,
-    gridVertices.indices.length,
-    gl.UNSIGNED_INT,
-    0
-  );
+gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+gl.drawElements(
+  gl.TRIANGLES,
+  gridVertices.indices.length,
+  gl.UNSIGNED_INT,
+  0
+);
 
-  requestAnimationFrame(render);
+requestAnimationFrame(render);
 }
+      </code></pre>
+        <p>
+          This function drives the animation of the scene. It calculates the
+          elapsed time using the current timestamp and sends it to the vertex
+          shader for further processing. Additionally, it incorporates user
+          input from a slider (ranging from 0 to 3) to adjust the time scale
+          multiplier, allowing users to control the speed of the wave animation.
+        </p>
+
+        <h2>2. Vertex Shader</h2>
       </div>
     </div>
   </body>
