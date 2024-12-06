@@ -212,30 +212,93 @@
           motion, commonly known as Gerstner waves. This approach, rooted in
           fluid dynamics, is derived from the Euler equations and accurately
           models the periodic motion of fluid particles in a wave.
-        </p>
+       
 
         <h1>Key Components</h1>
-        <h2>1. Render loop</h2>
+        <h2>1. The grid</h2>
+
+        <img src="https://developer.download.nvidia.com/books/gpugems/fig01-05.jpg" />
+        <p class="caption">
+          <a href="https://developer.nvidia.com/gpugems/gpugems/part-i-natural-effects/chapter-1-effective-water-simulation-physical-models">nvidia GPU Gems: Chapter 1. Effective Water Simulation from Physical Models</a>
+        
+
+         <p>
+          This function generates a subdivided grid, including:
+
+          <ul>
+            <li>Vertices: Positions of each point on the grid.</li>
+            <li>Normals: Upward-facing normals for basic lighting.</li>
+            <li>Connectivity between vertices to define triangles.</li> 
+          </ul>
+        
+        <pre><code class="hljs language-javascript">
+function createGridWithNormals(size, divisions) {
+  const halfSize = size / 2;
+  const step = size / divisions;
+  const vertices = [];
+  const normals = [];
+  const indices = [];
+
+  for (let j = 0; j <= divisions; j++) {
+    for (let i = 0; i <= divisions; i++) {
+      const x = -halfSize + i * step;
+      const z = -halfSize + j * step;
+      vertices.push(x, 0, z);
+      normals.push(0, 1, 0);
+    }
+  }
+
+  for (let j = 0; j < divisions; j++) {
+    for (let i = 0; i < divisions; i++) {
+      const topLeft = j * (divisions + 1) + i;
+      const topRight = topLeft + 1;
+      const bottomLeft = topLeft + (divisions + 1);
+      const bottomRight = bottomLeft + 1;
+      indices.push(topLeft, bottomLeft, topRight);
+      indices.push(topRight, bottomLeft, bottomRight);
+    }
+  }
+
+  return {
+    vertices: new Float32Array(vertices),
+    normals: new Float32Array(normals),
+    indices: new Uint32Array(indices),
+  };
+}
+        </pre></code>
+        <img src="/src/quadxz.jpg" />
+        <h2>The Grid vs. A Simple Plane</h2>
+        
+        <p>A quad (simple plane) consists of only four vertices, which limits its potential for complex transformations in the vertex shader. By converting it into a grid with many vertices, shaders can manipulate the surface in finer detail. This is essential for effects like wave simulations, lighting interactions, and deformation.
+
+        <h2>Key Advantages of Using a Grid</h2>
+        <ol>
+          <li>Better Shader Performance: A dense grid allows vertex shaders to calculate individual transformations (e.g., simulating waves).</li>
+          <li>Improved Lighting: With more vertices, normals can be computed accurately, leading to smoother lighting effects.</li>
+          <li>High Detail: Visual effects like water ripples or terrain deformation look more realistic on a subdivided grid.</li>
+        </ol>
+        
+        <h2>2. Render loop</h2>
         <pre><code class="hljs language-javascript">
 function render() {
-resizeCanvas();
+  resizeCanvas();
+  
+  const currentTime = Date.now();
+  const elapsedTime = (currentTime - startTime) / 1000; // in seconds
 
-const currentTime = Date.now();
-const elapsedTime = (currentTime - startTime) / 1000; // in seconds
+  gl.uniform1f(timerLocation, elapsedTime);
 
-gl.uniform1f(timerLocation, elapsedTime);
+  gl.uniform1f(timeScaleLocation, parseFloat(timeScaleSlider.value));
 
-gl.uniform1f(timeScaleLocation, parseFloat(timeScaleSlider.value));
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  gl.drawElements(
+    gl.TRIANGLES,
+    gridVertices.indices.length,
+    gl.UNSIGNED_INT,
+    0
+  );
 
-gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-gl.drawElements(
-  gl.TRIANGLES,
-  gridVertices.indices.length,
-  gl.UNSIGNED_INT,
-  0
-);
-
-requestAnimationFrame(render);
+  (render);
 }
       </code></pre>
         <p>
@@ -244,9 +307,10 @@ requestAnimationFrame(render);
           shader for further processing. Additionally, it incorporates user
           input from a slider (ranging from 0 to 3) to adjust the time scale
           multiplier, allowing users to control the speed of the wave animation.
-        </p>
-
-        <h2>2. Vertex Shader</h2>
+        
+        <h2>3. Trochoidal wave motion</h2>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/1/12/Forces_in_Trochoidal_wave.gif" >\
+        
       </div>
     </div>
   </body>

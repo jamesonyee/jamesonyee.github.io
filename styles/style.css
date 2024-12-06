@@ -108,3 +108,10 @@ nav li:hover .sub-menu {
 p {
   font-size: 18px;
 }
+
+#writeup img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
