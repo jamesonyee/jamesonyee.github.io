@@ -85,26 +85,7 @@
               step="1"
               value="0"
             />
-          </details>
-
-          <!-- Time Scale Section -->
-          <details>
-            <summary>Wave speed</summary>
-            <label for="timeScale">Time Scale:</label>
-            <input
-              type="range"
-              id="timeScale"
-              min="0"
-              max="3"
-              step="0.01"
-              value="1"
-            />
-            <span id="timeScaleValue">1</span>
-          </details>
-
-          <!-- Water Settings Section -->
-          <details>
-            <summary>Water Settings</summary>
+            <br />
             <label for="noiseAmp">Noise Amplitude:</label>
             <input
               type="range"
@@ -126,6 +107,26 @@
               value="0.1"
             />
             <span id="noiseFreqValue">1</span>
+          </details>
+
+          <!-- Time Scale Section -->
+          <details>
+            <summary>Wave speed</summary>
+            <label for="timeScale">Time Scale:</label>
+            <input
+              type="range"
+              id="timeScale"
+              min="0"
+              max="3"
+              step="0.01"
+              value="1"
+            />
+            <span id="timeScaleValue">1</span>
+          </details>
+
+          <!-- Water Settings Section -->
+          <details>
+            <summary>Water Settings</summary>
           </details>
 
           <!-- Wave 1 Section -->
@@ -212,25 +213,112 @@
           motion, commonly known as Gerstner waves. This approach, rooted in
           fluid dynamics, is derived from the Euler equations and accurately
           models the periodic motion of fluid particles in a wave.
-       
+        </p>
+
+        <h2>Gerstner Wave equation</h2>
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/1/12/Forces_in_Trochoidal_wave.gif"
+        />
+
+        <h2>Features</h2>
+        <p>
+          This program provides an intuitive interface with sliders that allow
+          users to explore and modify each part of the Gerstner wave equation as
+          well as and lighting effects interactively.
+          <br />
+          <br />
+          Real-Time Feedback: Any changes made to sliders are instantly rendered
+          on the wave surface, providing immediate visual feedback that
+          demonstrates the interaction diferrent aspects of the program.
+        </p>
+
+        <h2>Lighting Interaction</h2>
+        <ol>
+          <li>
+            Daylight Adjustment:
+            <ul>
+              <li>
+                enables users to manipulate the scene's light level in a way
+                that simulates the path of the sun. This feature highlights the
+                interplay between light and water, showcasing how light
+                reflections and shading adapt to the dynamic wave patterns.
+              </li>
+            </ul>
+          </li>
+        </ol>
+
+        <h2>Wave Customization</h2>
+        <ol>
+          <li>
+            Water Settings:
+            <ul>
+              <li>
+                Noise Amplitude and Noise Frequency: These sliders provide
+                additional customization for adding subtle irregularities or
+                randomness to the water, enhancing realism.
+              </li>
+            </ul>
+          </li>
+
+          <li>Wave Speed</li>
+          <ul>
+            <li>
+              Allows users to adjust the time scale with a slider, directly
+              influencing the animation's speed.
+            </li>
+          </ul>
+
+          <li>Individual Wave Settings (Wave 1 & Wave 2)</li>
+          <ul>
+            <li>
+              Amplitude: Enable users to control the height of the waves,
+              demonstrating how amplitude changes impact the overall water
+              surface appearance.
+            </li>
+            <li>
+              Wave Angle: Adjusting this sliders manipulates the direction of
+              wave propagation, allowing users to observe the interaction
+              between multiple waves from different angles.
+            </li>
+            <li>
+              Density: The density sliders help users fine-tune the wave's
+              appearance, possibly affecting the frequency or compactness of the
+              wave pattern.
+            </li>
+          </ul>
+        </ol>
 
         <h1>Key Components</h1>
         <h2>1. The grid</h2>
 
-        <img src="https://developer.download.nvidia.com/books/gpugems/fig01-05.jpg" />
+        <img
+          src="https://developer.download.nvidia.com/books/gpugems/fig01-05.jpg"
+        />
         <p class="caption">
-          <a href="https://developer.nvidia.com/gpugems/gpugems/part-i-natural-effects/chapter-1-effective-water-simulation-physical-models">nvidia GPU Gems: Chapter 1. Effective Water Simulation from Physical Models</a>
-        
+          <a
+            href="https://developer.nvidia.com/gpugems/gpugems/part-i-natural-effects/chapter-1-effective-water-simulation-physical-models"
+            >Nvidia GPU Gems: Figure 1-5 Gerstner Waves</a
+          >
+        </p>
 
-         <p>
-          This function generates a subdivided grid, including:
+        <h3>Why a grid?</h3>
 
-          <ul>
-            <li>Vertices: Positions of each point on the grid.</li>
-            <li>Normals: Upward-facing normals for basic lighting.</li>
-            <li>Connectivity between vertices to define triangles.</li> 
-          </ul>
-        
+        <p>
+          A quad (simple plane) consists of only four vertices, which limits its
+          potential for complex transformations in the vertex shader. By
+          converting it into a grid with many vertices, shaders can manipulate
+          the surface in finer detail. This is essential for effects like wave
+          simulations, lighting interactions, and deformation.
+        </p>
+
+        <p>This function generates a subdivided grid, including:</p>
+
+        <ul>
+          <li>Vertices: Positions of each point on the grid.</li>
+          <li>Normals: Upward-facing normals for basic lighting.</li>
+          <li>Connectivity between vertices to define triangles.</li>
+        </ul>
+
         <pre><code class="hljs language-javascript">
 function createGridWithNormals(size, divisions) {
   const halfSize = size / 2;
@@ -265,52 +353,118 @@ function createGridWithNormals(size, divisions) {
     indices: new Uint32Array(indices),
   };
 }
-        </pre></code>
+        </code></pre>
         <img src="/src/quadxz.jpg" />
-        <h2>The Grid vs. A Simple Plane</h2>
-        
-        <p>A quad (simple plane) consists of only four vertices, which limits its potential for complex transformations in the vertex shader. By converting it into a grid with many vertices, shaders can manipulate the surface in finer detail. This is essential for effects like wave simulations, lighting interactions, and deformation.
 
-        <h2>Key Advantages of Using a Grid</h2>
+        <h3>Key Advantages</h3>
         <ol>
-          <li>Better Shader Performance: A dense grid allows vertex shaders to calculate individual transformations (e.g., simulating waves).</li>
-          <li>Improved Lighting: With more vertices, normals can be computed accurately, leading to smoother lighting effects.</li>
-          <li>High Detail: Visual effects like water ripples or terrain deformation look more realistic on a subdivided grid.</li>
+          <li>
+            Better Shader Performance: A dense grid allows vertex shaders to
+            calculate individual transformations (e.g., simulating waves).
+          </li>
+          <li>
+            Improved Lighting: With more vertices, normals can be computed
+            accurately, leading to smoother lighting effects.
+          </li>
+          <li>
+            High Detail: Visual effects like water ripples or terrain
+            deformation look more realistic on a subdivided grid.
+          </li>
         </ol>
-        
-        <h2>2. Render loop</h2>
+
+        <h3>Vertex Shader implementation</h3>
+
+        <pre><code class="hljs language-c">
+// Wave 1 - Vertex Displacement 
+float freq0 = sqrt(g * uDensity0);
+
+float thetam = uDensity0 * cos(uPropAng0) * aVertexPosition.x +
+               uDensity0 * sin(uPropAng0) * aVertexPosition.z -
+               freq0 * Timer * uTimeScale;
+
+newx -= uAmp0 * cos(uPropAng0) * sin(thetam);
+newy += uAmp0 * cos(thetam);
+newz -= uAmp0 * sin(uPropAng0) * sin(thetam);
+        </code></pre>
+        <p>
+          This is the displacement portion of the vertex shader which reads in
+          slider vaules (variables that have a "u" prefix) into the gersnter
+          equation explained above.
+        </p>
+
+        <h3>Fragment Shader implementation</h3>
+        <pre><code class="hljs language-javascript">
+void main(void) {
+  vec3 myColor = vec3(0.2, 0.2, .8); // Blue water color
+  vec3 specularColor = vec3(1.0, 1.0, 1.0); // White reflection color
+  
+  vec4 nvx = texture( Noise3, uNoiseFreq*vMC );
+  float angx = nvx.r + nvx.g + nvx.b + nvx.a  -  2.;	// -1. to +1.
+  angx *= uNoiseAmp;
+
+  vec4 nvy = texture( Noise3, uNoiseFreq*vec3(vMC.xy,vMC.z+0.5) );
+  float angy = nvy.r + nvy.g + nvy.b + nvy.a  -  2.;	// -1. to +1.
+  angy *= uNoiseAmp;
+
+  vec3 Normal = normalize(vN);
+  Normal = RotateNormal(angx, angy, Normal);
+
+  vec3 Light = normalize(vL);
+  vec3 Eye = normalize(vE);
+
+  float uKa = .6;
+  float uKs = .4;
+  float uKd = .3;
+  float uShininess = 100.; 
+
+  vec3 ambient = uKa * myColor;
+  
+  float dd = max(dot(normalize(vN), Light), 0.0);
+  vec3 diffuse = uKd * dd * myColor;
+
+  float ss = 0.;
+  if ( dot(Normal, Light) > 0. ){
+    vec3 ref = normalize( reflect( -Light, Normal) );
+    ss = pow( max( dot(Eye,ref),0. ), uShininess );
+  }
+
+  vec3 specular = uKs * ss * specularColor.rgb;
+  fragColor = vec4( ambient + diffuse + specular, 1. );
+}
+        </code></pre>
+        <h2>3. Render loop</h2>
+
         <pre><code class="hljs language-javascript">
 function render() {
-  resizeCanvas();
-  
-  const currentTime = Date.now();
-  const elapsedTime = (currentTime - startTime) / 1000; // in seconds
+    resizeCanvas();
+    
+    const currentTime = Date.now();
+    const elapsedTime = (currentTime - startTime) / 1000; // in seconds
 
-  gl.uniform1f(timerLocation, elapsedTime);
+    gl.uniform1f(timerLocation, elapsedTime);
 
-  gl.uniform1f(timeScaleLocation, parseFloat(timeScaleSlider.value));
+    gl.uniform1f(timeScaleLocation, parseFloat(timeScaleSlider.value));
 
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  gl.drawElements(
-    gl.TRIANGLES,
-    gridVertices.indices.length,
-    gl.UNSIGNED_INT,
-    0
-  );
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.drawElements(
+      gl.TRIANGLES,
+      gridVertices.indices.length,
+      gl.UNSIGNED_INT,
+      0
+    );
 
-  (render);
+    requestAnimationFrame(render);
 }
-      </code></pre>
+        </code></pre>
         <p>
-          This function drives the animation of the scene. It calculates the
-          elapsed time using the current timestamp and sends it to the vertex
-          shader for further processing. Additionally, it incorporates user
-          input from a slider (ranging from 0 to 3) to adjust the time scale
-          multiplier, allowing users to control the speed of the wave animation.
-        
-        <h2>3. Trochoidal wave motion</h2>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/1/12/Forces_in_Trochoidal_wave.gif" >\
-        
+          This function powers the scene's animation by calculating the elapsed
+          time from the current timestamp and passing it to the vertex shader to
+          determine vertex displacement. It also incorporates user input from a
+          slider (ranging from 0 to 3) to adjust the time scale multiplier,
+          enabling users to control the wave animation speed. The function is
+          called to redraw the scene every frame, typically at the refresh rate
+          of the user's monitor (usually 60 frames per second).
+        </p>
       </div>
     </div>
   </body>
