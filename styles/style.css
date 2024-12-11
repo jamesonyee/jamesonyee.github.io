@@ -39,14 +39,29 @@ main {
 #content-wrapper {
   transition: transform 0.3s ease-in-out;
   transform: translateX(0); /* Default position */
-  margin-right: 550px;
-  margin-left: 50px;
+  margin-right: 40%;
+  margin-left: 5%;
 }
 
 #content-wrapper.sidebar-open {
   transform: translateX(
     150px
   ); /* Move content to the right when sidebar opens */
+}
+
+#canvas-container {
+  position: relative;
+  width: 100vh;
+  height: auto; /* Height will be determined by the aspect ratio */
+  background-color: black;
+
+  /* Maintain a 16:9 aspect ratio */
+  aspect-ratio: 16 / 9;
+
+  /* Ensure it's always at the top */
+  margin: 0;
+  top: 20px;
+  left: 20px;
 }
 
 #hamburger,
@@ -107,6 +122,10 @@ nav li:hover .sub-menu {
 
 p {
   font-size: 18px;
+}
+
+#writeup {
+  padding-left: 20px;
 }
 
 #writeup img {

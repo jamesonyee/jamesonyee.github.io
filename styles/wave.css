@@ -4,21 +4,6 @@ body {
   margin: 0;
 }
 
-#canvas-container {
-  position: relative;
-  width: 100vh;
-  height: auto; /* Height will be determined by the aspect ratio */
-  background-color: black;
-
-  /* Maintain a 16:9 aspect ratio */
-  aspect-ratio: 16 / 9;
-
-  /* Ensure it's always at the top */
-  margin: 0;
-  top: 20px;
-  left: 20px;
-}
-
 canvas {
   display: block;
   width: 100%;
@@ -35,10 +20,4 @@ canvas {
   border: none;
   cursor: pointer;
   z-index: 10;
-}
-
-#writeup {
-  padding: 20px;
-  width: 100vh; /* Makes it take up remaining space */
-  overflow-y: auto;
 }

@@ -22,7 +22,7 @@
     />
 
     <link rel="stylesheet" href="styles/style.css" />
-    <link rel="stylesheet" href="styles/homepage.css" />
+    <link rel="stylesheet" href="styles//wave.css" />
     <script src="/js/sidebar.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script>
@@ -32,33 +32,29 @@
   </head>
 
   <body>
-    <header>
-      <i class="fa fa-bars" id="hamburger" aria-hidden="true"></i>
-      <nav id="sidebar">
+    <nav id="sidebar">
         <i class="fa fa-times" id="close-button" aria-hidden="true"></i>
         <br />
-        <ul>
-          <li>
-            <a href="/">Home</a>
-            <ul class="sub-menu">
-              <li><a href="/#introduction">Introduction</a></li>
-              <li><a href="/#skills">Interests</a></li>
-              <li><a href="/#edu">Education</a></li>
-              <li><a href="/#exp">Experience</a></li>
-              <li><a href="/#Resume">Resume</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="#">Projects</a>
-            <ul class="sub-menu">
-              <li><a href="/waves.html">Wave Simulation</a></li>
-              <li><a href="#">Project 2</a></li>
-              <li><a href="#">Project 3</a></li>
-            </ul>
-          </li>
-          <li><a href="#">Services</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
+
+        <details>
+          <summary><a href="#">Home</a></summary>
+          <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#skills">Interests</a></li>
+            <li><a href="#edu">Education</a></li>
+            <li><a href="#exp">Experience</a></li>
+            <li><a href="#Resume">Resume</a></li>
+          </ul>
+        </details>
+
+        <details>
+          <summary><a href="#">Projects</a></summary>
+          <ul>
+            <li><a href="/waves.html">Wave Simulation</a></li>
+            <li><a href="/ballquest.html"> BallQuest AR</a></li>
+            <li><a href="/MLviewer.html"> ML2 Model viewer</a></li>
+          </ul>
+        </details>
       </nav>
     </header>
 
