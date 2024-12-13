@@ -1,3 +1,10 @@
+:root {
+  --sidebar-bg-color: #2c3e50;
+  --sidebar-text-color: #ecf0f1;
+  --sidebar-hover-color: #3498db;
+  --sidebar-accent-color: #e74c3c;
+}
+
 header {
   position: relative;
   z-index: 10; /* Ensure it's above the sidebar */
@@ -19,49 +26,92 @@ h3 {
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #f0f0f0;
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  transform: translateX(-200px); /* Initially hidden */
-  transition: transform 0.3s ease-in-out;
-  z-index: 5;
+  background-color: var(--sidebar-bg-color);
+  color: var(--sidebar-text-color);
+  padding: 30px 20px;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+  transform: translateX(-100%); /* Fully hidden off-screen */
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  overflow-y: auto;
 }
 
 #sidebar.open {
-  transform: translateX(0); /* Slide in when open */
+  transform: translateX(0);
 }
 
-/* Adjust the main content area for sidebar toggle */
-main {
-  padding: 20px; /* Adds padding to the main content */
+#close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  color: var(--sidebar-accent-color);
+  cursor: pointer;
+  font-size: 1.5rem;
+  width: 40px; /* Fixed width */
+  height: 40px; /* Fixed height */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center the icon */
+  border-radius: 50%; /* Optional: make it circular */
+  transition: all 0.3s ease;
 }
 
-#content-wrapper {
-  transition: transform 0.3s ease-in-out;
-  transform: translateX(0); /* Default position */
-  margin-right: 40%;
-  margin-left: 5%;
+#close-button:hover {
+  transform: rotate(90deg);
 }
 
-#content-wrapper.sidebar-open {
-  transform: translateX(
-    150px
-  ); /* Move content to the right when sidebar opens */
+#sidebar details {
+  margin-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 10px;
 }
 
-#canvas-container {
-  position: relative;
-  width: 100vh;
-  height: auto; /* Height will be determined by the aspect ratio */
-  background-color: black;
+#sidebar summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
 
-  /* Maintain a 16:9 aspect ratio */
-  aspect-ratio: 16 / 9;
+#sidebar summary:hover {
+  background-color: var(--sidebar-hover-color);
+}
 
-  /* Ensure it's always at the top */
-  margin: 0;
-  top: 20px;
-  left: 20px;
+#sidebar summary a {
+  color: var(--sidebar-text-color);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#sidebar ul {
+  list-style-type: none;
+  padding-left: 20px;
+}
+
+#sidebar ul li {
+  margin: 10px 0;
+}
+
+#sidebar ul li a {
+  color: var(--sidebar-text-color);
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+#sidebar ul li a:hover {
+  opacity: 1;
+  color: var(--sidebar-hover-color);
+}
+
+@media (max-width: 768px) {
+  #sidebar {
+    width: 100%;
+    max-width: 300px;
+  }
 }
 
 #hamburger,
@@ -113,6 +163,39 @@ nav li:hover .sub-menu {
 .sub-menu li a {
   font-size: 16px;
   padding: 5px 0;
+}
+
+/* Adjust the main content area for sidebar toggle */
+main {
+  padding: 20px; /* Adds padding to the main content */
+}
+
+#content-wrapper {
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(0); /* Default position */
+  margin-right: 40%;
+  margin-left: 5%;
+}
+
+#content-wrapper.sidebar-open {
+  transform: translateX(
+    150px
+  ); /* Move content to the right when sidebar opens */
+}
+
+#canvas-container {
+  position: relative;
+  width: 100vh;
+  height: auto; /* Height will be determined by the aspect ratio */
+  background-color: black;
+
+  /* Maintain a 16:9 aspect ratio */
+  aspect-ratio: 16 / 9;
+
+  /* Ensure it's always at the top */
+  margin: 0;
+  top: 20px;
+  left: 20px;
 }
 
 .edu-container {
