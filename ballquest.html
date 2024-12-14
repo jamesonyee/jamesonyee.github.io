@@ -48,8 +48,7 @@
     </header>
     <div id="content-wrapper">
       <iframe
-        width="560"
-        height="315"
+        id="video"
         src="https://www.youtube.com/embed/7H5jeW4aw6o?si=zW9R-TJO_izsbqEC"
         title="YouTube video player"
         frameborder="0"
@@ -57,6 +56,56 @@
         referrerpolicy="strict-origin-when-cross-origin"
         allowfullscreen
       ></iframe>
+      <div id="writeup">
+        <h1>Overview</h1>
+        <p>
+          Designed and developed an innovative AR maze game as part of a team
+          senior capstone project, delivering an immersive mixed-reality
+          experience. Leveraged the advanced passthrough capabilities of the
+          Meta Quest 3 to seamlessly blend virtual elements with the real world,
+          enhancing user interaction and immersion. Built on Unreal Engine 5,
+          the game features realistic physics that enable players to interact
+          with virtual balls by tilting and manipulating a physical box,
+          creating intuitive and engaging gameplay that bridges the gap between
+          digital and physical environments.
+        </p>
+
+        <h1>Features</h1>
+
+        <h1>Key Components</h1>
+        <h2>1. Passthrough</h2>
+        <p>
+          The passthrough feature on the Meta Quest 3 allows users to see their
+          real-world surroundings while interacting with virtual elements,
+          creating a mixed-reality experience. In BallQuest AR, this feature
+          enhances immersion by enabling users to see and interact with their
+          physical environment during gameplay.
+        </p>
+        <h2>2. Maze Generation</h2>
+        <p>
+          3D mazes are the core of our game. Below is how we accomplished
+          creating mazes of varying difficulty and added them to the game
+          <br />
+          <br />
+          We used
+          <a href="https://www.mazegenerator.net/">www.mazegenerator.net/</a>
+          which is a web based maze generator that generates customizable 2d
+          mazes in various file formats for users. For this implementation we
+          used orthonganal (square celled) mazes. The generator allows users to
+          choose a specific height and width which is how we are able to make
+          more difficult mazes. The generator outputs a 2d SVG which we were
+          able to import into blender to give it a height and thickness modifier
+          to make it a 3D game ready asset for UE5.
+        </p>
+        <div style="display: flex; gap: 10px">
+          <img src="/src/maze.jpg" alt="2D Maze" style="width: 30%" />
+          <img
+            src="/src/mazeblender.jpg"
+            alt="3D Maze in Blender"
+            style="width: 70%"
+          />
+        </div>
+      </div>
     </div>
   </body>
 </html>
