@@ -30,3 +30,26 @@ nav li a {
 main {
   float: inline-end;
 }
+
+#exp {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.exp-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.exp-item img {
+  width: 100px;
+  height: auto;
+}
+
+.exp-details p {
+  margin: 0; /* Remove default paragraph margins */
+  font-size: 16px;
+  font-weight: bold;
+}

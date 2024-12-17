@@ -28,7 +28,10 @@
         <br />
 
         <details>
-          <summary><a href="/">Home</a></summary>
+          <summary>
+            <i class="fa fa-times" id="close-button" aria-hidden="true"></i
+            ><a href="/">Home</a>
+          </summary>
           <ul>
             <li><a href="index.html#introduction">Introduction</a></li>
             <li><a href="index.html#skills">Interests</a></li>
@@ -96,22 +99,20 @@
         <!-- Experience Section -->
         <section id="exp">
           <h2>Experience</h2>
-          <p><b>Undergraduate Graphics Research Assistant</b></p>
-          <p><b>SIGGRPAH Student Volunteer</b></p>
-          Collaborated with teams to ensure the smooth operation of ACM SIGGRAPH
-          2024.
-          <ul>
-            <li>
-              Facilitated immersive VR experiences in the VR Theater, including
-              guiding guests and assisting with VR headset usage.
-            </li>
-            <li>
-              Enforced conference policies such as "No Photography" and
-              monitored attendee compliance. Assisted with attendee management
-              tasks, including checking badges and providing directional
-              support.
-            </li>
-          </ul>
+
+          <div class="exp-item">
+            <img src="src/siggraphlogo.png" alt="SIGGRAPH Logo" />
+            <div class="exp-details">
+              <p><b>SIGGRAPH Student Volunteer</b></p>
+            </div>
+          </div>
+
+          <div class="exp-item">
+            <img src="src/altosulogo" alt="OSU Logo" />
+            <div class="exp-details">
+              <p><b>Undergraduate Graphics Research Assistant</b></p>
+            </div>
+          </div>
         </section>
 
         <hr />
