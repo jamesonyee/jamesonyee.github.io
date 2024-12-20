@@ -216,12 +216,7 @@
           models the periodic motion of fluid particles in a wave.
         </p>
 
-        <h2>Gerstner Wave equation</h2>
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/1/12/Forces_in_Trochoidal_wave.gif"
-        />
-
-        <h1>Features</h1>
+        <h3>Features</h3>
         <p>
           This program provides an intuitive interface with sliders that allow
           users to explore and modify each part of the Gerstner wave equation as
@@ -232,6 +227,114 @@
           on the wave surface, providing immediate visual feedback that
           demonstrates the interaction diferrent aspects of the program.
         </p>
+
+        <h2>Gerstner Wave equation</h2>
+
+        <embed
+          src="/src/GerstnerEquation-MJB.pdf"
+          width="100%"
+          height="850"
+          type="application/pdf"
+        />
+        <p>
+          The Gerstner wave equations model the displacement of points on the
+          surface of water in three dimensions. These equations take into
+          account horizontal and vertical motion using sinusoidal functions
+          based on amplitude, wave density, and propagation angle:
+        </p>
+
+        <ul>
+          <li>
+            <b>Horizontal Motion (x'): </b> Adjusts the original x-coordinate by
+            subtracting a summation of terms involving amplitude (<code
+              >A<sub>m</sub></code
+            >), wave propagation angle (<code>&gamma;<sub>m</sub></code
+            >), and the sine of wave phase (<code>&theta;<sub>m</sub></code
+            >).
+          </li>
+          <li>
+            <b>Vertical Motion (y'): </b> Adds vertical displacement using a
+            cosine function of the wave phase (<code>&theta;<sub>m</sub></code
+            >).
+          </li>
+          <li>
+            <b>Horizontal Motion (z'): </b> Similar to x', adjusts the
+            z-coordinate based on sine terms.
+          </li>
+        </ul>
+
+        <p>
+          The wave phase (<code>&theta;<sub>m</sub></code
+          >) depends on wave density (<code>k<sub>m</sub></code
+          >), the position of the point, and time (<code>t</code>), resulting in
+          a periodic and realistic simulation of wave motion. This approach not
+          only simulates the fluid surface but also reflects interactions with
+          lighting for an enhanced visual effect.
+        </p>
+
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/1/12/Forces_in_Trochoidal_wave.gif"
+        />
+        <h3>Vertex Shader implementation</h3>
+
+        <pre><code class="hljs language-c">
+// Wave 1 - Vertex Displacement 
+float freq0 = sqrt(g * uDensity0);
+
+float thetam = uDensity0 * cos(uPropAng0) * aVertexPosition.x +
+               uDensity0 * sin(uPropAng0) * aVertexPosition.z -
+               freq0 * Timer * uTimeScale;
+
+newx -= uAmp0 * cos(uPropAng0) * sin(thetam);
+newy += uAmp0 * cos(thetam);
+newz -= uAmp0 * sin(uPropAng0) * sin(thetam);
+        </code></pre>
+        <p>
+          This is the displacement portion of the vertex shader which reads in
+          slider vaules (variables that have a "u" prefix) into the gersnter
+          equation explained above.
+        </p>
+
+        <h3>Fragment Shader implementation</h3>
+        <pre><code class="hljs language-javascript">
+void main(void) {
+  vec3 myColor = vec3(0.2, 0.2, .8); // Blue water color
+  vec3 specularColor = vec3(1.0, 1.0, 1.0); // White reflection color
+  
+  vec4 nvx = texture( Noise3, uNoiseFreq*vMC );
+  float angx = nvx.r + nvx.g + nvx.b + nvx.a  -  2.;	// -1. to +1.
+  angx *= uNoiseAmp;
+
+  vec4 nvy = texture( Noise3, uNoiseFreq*vec3(vMC.xy,vMC.z+0.5) );
+  float angy = nvy.r + nvy.g + nvy.b + nvy.a  -  2.;	// -1. to +1.
+  angy *= uNoiseAmp;
+
+  vec3 Normal = normalize(vN);
+  Normal = RotateNormal(angx, angy, Normal);
+
+  vec3 Light = normalize(vL);
+  vec3 Eye = normalize(vE);
+
+  float uKa = .6;
+  float uKs = .4;
+  float uKd = .3;
+  float uShininess = 100.; 
+
+  vec3 ambient = uKa * myColor;
+  
+  float dd = max(dot(normalize(vN), Light), 0.0);
+  vec3 diffuse = uKd * dd * myColor;
+
+  float ss = 0.;
+  if ( dot(Normal, Light) > 0. ){
+    vec3 ref = normalize( reflect( -Light, Normal) );
+    ss = pow( max( dot(Eye,ref),0. ), uShininess );
+  }
+
+  vec3 specular = uKs * ss * specularColor.rgb;
+  fragColor = vec4( ambient + diffuse + specular, 1. );
+}
+        </code></pre>
 
         <h2>Lighting Interaction</h2>
         <ol>
@@ -373,66 +476,6 @@ function createGridWithNormals(size, divisions) {
           </li>
         </ol>
 
-        <h3>Vertex Shader implementation</h3>
-
-        <pre><code class="hljs language-c">
-// Wave 1 - Vertex Displacement 
-float freq0 = sqrt(g * uDensity0);
-
-float thetam = uDensity0 * cos(uPropAng0) * aVertexPosition.x +
-               uDensity0 * sin(uPropAng0) * aVertexPosition.z -
-               freq0 * Timer * uTimeScale;
-
-newx -= uAmp0 * cos(uPropAng0) * sin(thetam);
-newy += uAmp0 * cos(thetam);
-newz -= uAmp0 * sin(uPropAng0) * sin(thetam);
-        </code></pre>
-        <p>
-          This is the displacement portion of the vertex shader which reads in
-          slider vaules (variables that have a "u" prefix) into the gersnter
-          equation explained above.
-        </p>
-
-        <h3>Fragment Shader implementation</h3>
-        <pre><code class="hljs language-javascript">
-void main(void) {
-  vec3 myColor = vec3(0.2, 0.2, .8); // Blue water color
-  vec3 specularColor = vec3(1.0, 1.0, 1.0); // White reflection color
-  
-  vec4 nvx = texture( Noise3, uNoiseFreq*vMC );
-  float angx = nvx.r + nvx.g + nvx.b + nvx.a  -  2.;	// -1. to +1.
-  angx *= uNoiseAmp;
-
-  vec4 nvy = texture( Noise3, uNoiseFreq*vec3(vMC.xy,vMC.z+0.5) );
-  float angy = nvy.r + nvy.g + nvy.b + nvy.a  -  2.;	// -1. to +1.
-  angy *= uNoiseAmp;
-
-  vec3 Normal = normalize(vN);
-  Normal = RotateNormal(angx, angy, Normal);
-
-  vec3 Light = normalize(vL);
-  vec3 Eye = normalize(vE);
-
-  float uKa = .6;
-  float uKs = .4;
-  float uKd = .3;
-  float uShininess = 100.; 
-
-  vec3 ambient = uKa * myColor;
-  
-  float dd = max(dot(normalize(vN), Light), 0.0);
-  vec3 diffuse = uKd * dd * myColor;
-
-  float ss = 0.;
-  if ( dot(Normal, Light) > 0. ){
-    vec3 ref = normalize( reflect( -Light, Normal) );
-    ss = pow( max( dot(Eye,ref),0. ), uShininess );
-  }
-
-  vec3 specular = uKs * ss * specularColor.rgb;
-  fragColor = vec4( ambient + diffuse + specular, 1. );
-}
-        </code></pre>
         <h2>3. Render loop</h2>
 
         <pre><code class="hljs language-javascript">
