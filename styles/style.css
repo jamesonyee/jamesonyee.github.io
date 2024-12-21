@@ -229,6 +229,12 @@ p {
   padding-left: 0px;
 }
 
+#writeup .caption {
+  font-size: 14px; /* Smaller font for captions */
+  color: #7f8c8d; /* Subtle text color */
+  font-style: italic; /* Optional: Adds a styled, professional touch */
+}
+
 #writeup img {
   max-width: 100%;
   height: auto;
@@ -241,4 +247,9 @@ p {
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
+}
+
+.github a {
+  text-decoration: none;
+  color: #000;
 }

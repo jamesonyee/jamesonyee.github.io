@@ -206,6 +206,13 @@
         </div>
       </div>
       <div id="writeup">
+        <p class="github">
+          <a
+            href="https://github.com/jamesonyee/jamesonyee.github.io/tree/main/shaders"
+          >
+            <i class="fa fa-github-square" style="font-size: 48px"> </i>
+          </a>
+        </p>
         <h1>Overview</h1>
         <p>
           This WebGL project features a dynamic wave animation enhanced by a
@@ -229,13 +236,10 @@
         </p>
 
         <h2>Gerstner Wave equation</h2>
-
-        <embed
-          src="/src/GerstnerEquation-MJB.pdf"
-          width="100%"
-          height="850"
-          type="application/pdf"
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/1/12/Forces_in_Trochoidal_wave.gif"
         />
+
         <p>
           The Gerstner wave equations model the displacement of points on the
           surface of water in three dimensions. These equations take into
@@ -272,9 +276,21 @@
           lighting for an enhanced visual effect.
         </p>
 
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/1/12/Forces_in_Trochoidal_wave.gif"
+        <embed
+          src="/src/GerstnerEquation-MJB.pdf"
+          width="100%"
+          height="850"
+          type="application/pdf"
         />
+        <a
+          href="https://web.engr.oregonstate.edu/~mjb/cs557/Handouts/WaveMotion.1pp.pdf"
+        >
+          <p class="caption">
+            Animating Wave Motion using Gerstner Waves. Mike Bailey, Oregon
+            State University, CS557 -- Computer Graphics Shaders, December 2023.
+          </p>
+        </a>
+
         <h3>Vertex Shader implementation</h3>
 
         <pre><code class="hljs language-c">
@@ -295,6 +311,21 @@ newz -= uAmp0 * sin(uPropAng0) * sin(thetam);
           equation explained above.
         </p>
 
+        <pre><code class="hljs language-javascript">
+float dthetamda = uDensity0 * cos(uPropAng0);
+float dthetamdb = uDensity0 * sin(uPropAng0);
+dxda -= uAmp0 * cos(uPropAng0) * cos(thetam) * dthetamda;
+dyda -= uAmp0 * sin(thetam) * dthetamda;
+dzda -= uAmp0 * sin(uPropAng0) * cos(thetam) * dthetamda;
+dxdb -= uAmp0 * cos(uPropAng0) * cos(thetam) * dthetamdb;
+dydb -= uAmp0 * sin(thetam) * dthetamdb;
+dzdb -= uAmp0 * sin(uPropAng0) * cos(thetam) * dthetamdb;
+        </code></pre>
+        <p>
+          This math is used to calculate the surface normal of the wave in its
+          current form to be sent to the fragment shader for lighting. In the 2D
+          wikipedia illustration this
+        </p>
         <h3>Fragment Shader implementation</h3>
         <pre><code class="hljs language-javascript">
 void main(void) {
@@ -398,12 +429,12 @@ void main(void) {
         <img
           src="https://developer.download.nvidia.com/books/gpugems/fig01-05.jpg"
         />
-        <p class="caption">
-          <a
-            href="https://developer.nvidia.com/gpugems/gpugems/part-i-natural-effects/chapter-1-effective-water-simulation-physical-models"
-            >Nvidia GPU Gems: Figure 1-5 Gerstner Waves</a
-          >
-        </p>
+
+        <a
+          href="https://developer.nvidia.com/gpugems/gpugems/part-i-natural-effects/chapter-1-effective-water-simulation-physical-models"
+        >
+          <p class="caption">Nvidia GPU Gems: Figure 1-5 Gerstner Waves</p></a
+        >
 
         <h3>Why a grid?</h3>
 
