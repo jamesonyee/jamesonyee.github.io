@@ -82,6 +82,7 @@ h3 {
 }
 
 #sidebar summary {
+  display: none;
   list-style: none;
 }
 
