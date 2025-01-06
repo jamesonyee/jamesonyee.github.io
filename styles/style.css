@@ -257,6 +257,10 @@ p {
     list-style: none; /* Safari applies a list style for default arrows */
   }
 
+  #sidebar summary::marker {
+    display: none; /* Remove default browser arrow */
+  }
+
   #sidebar summary::-webkit-details-marker {
     display: none; /* Explicitly hides Safari's native arrow */
   }
@@ -266,7 +270,7 @@ p {
 #sidebar summary:after {
   content: "▼"; /* Your custom arrow */
   font-size: 12px;
-  margin-left: 10px;
+  margin-left: 5%;
   transition: transform 0.3s ease;
 }
 
