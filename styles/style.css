@@ -276,4 +276,11 @@ p {
   #sidebar details[open] summary:after {
     transform: rotate(180deg);
   }
+
+  #content-wrapper {
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(0); /* Default position */
+    margin-right: 40%;
+    margin-left: 5%;
+  }
 }
