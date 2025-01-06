@@ -125,13 +125,6 @@ h3 {
   color: var(--sidebar-hover-color);
 }
 
-@media (max-width: 768px) {
-  #sidebar {
-    width: 100%;
-    max-width: 100px;
-  }
-}
-
 #hamburger,
 #close-button {
   position: fixed;
