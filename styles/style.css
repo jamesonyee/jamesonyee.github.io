@@ -81,11 +81,6 @@ h3 {
   display: none; /* Removes the default arrow */
 }
 
-#sidebar summary {
-  display: none;
-  list-style: none;
-}
-
 #sidebar summary:after {
   content: "▼"; /* Custom arrow */
   font-size: 12px; /* Adjust size if needed */
