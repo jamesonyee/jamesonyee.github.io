@@ -213,28 +213,6 @@ main {
   left: 0px;
 }
 
-/* Mobile-specific adjustments */
-@media (max-width: 768px) {
-  #sidebar {
-    width: 100px; /* Adjust sidebar width for mobile */
-  }
-
-  #content-wrapper {
-    margin-left: 50%; /* Remove extra margins for better fit */
-    margin-right: 0;
-    transform: translateX(0); /* Prevent shifting on mobile */
-  }
-
-  #content-wrapper.sidebar-open {
-    transform: translateX(100px); /* Adjust for smaller sidebar width */
-  }
-
-  #canvas-container {
-    margin-top: 10px; /* Add spacing for mobile view */
-    top: 10px;
-  }
-}
-
 .edu-container {
   display: flex;
   align-items: center; /* Aligns OSU logo and text vertically */
@@ -271,4 +249,28 @@ p {
 .github a {
   text-decoration: none;
   color: #000;
+}
+
+/* Safari-specific fix: Completely hides the native marker */
+@supports (-webkit-appearance: none) {
+  #sidebar summary {
+    list-style: none; /* Safari applies a list style for default arrows */
+  }
+
+  #sidebar summary::-webkit-details-marker {
+    display: none; /* Explicitly hides Safari's native arrow */
+  }
+}
+
+/* Custom arrow styling */
+#sidebar summary:after {
+  content: "▼"; /* Your custom arrow */
+  font-size: 12px;
+  margin-left: 10px;
+  transition: transform 0.3s ease;
+}
+
+/* Rotates the custom arrow when the <details> is open */
+#sidebar details[open] summary:after {
+  transform: rotate(180deg);
 }
