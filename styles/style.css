@@ -268,7 +268,7 @@ p {
   #sidebar summary:after {
     content: "▼"; /* Your custom arrow */
     font-size: 12px;
-    margin-left: 1%;
+    margin-left: 10%;
     transition: transform 0.3s ease;
   }
 
