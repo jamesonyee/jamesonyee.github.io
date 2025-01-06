@@ -220,7 +220,7 @@ main {
   }
 
   #content-wrapper {
-    margin-left: 0; /* Remove extra margins for better fit */
+    margin-left: 50%; /* Remove extra margins for better fit */
     margin-right: 0;
     transform: translateX(0); /* Prevent shifting on mobile */
   }
