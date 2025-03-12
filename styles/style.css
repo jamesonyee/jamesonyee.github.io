@@ -239,6 +239,21 @@ p {
   display: block;
 }
 
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Creates 2 equal columns */
+  gap: 50px; /* Adjust spacing between images */
+  justify-content: center;
+  max-width: 1000px; /* Optional: Set a max width */
+}
+
+.image-grid img {
+  width: 100%; /* Ensures images take up full cell width */
+  height: auto;
+  object-fit: cover;
+  border-radius: 5px; /* Optional: Adds rounded corners */
+}
+
 #video {
   position: relative;
   width: 100%;
@@ -275,12 +290,5 @@ p {
   /* Rotates the custom arrow when the <details> is open */
   #sidebar details[open] summary:after {
     transform: rotate(180deg);
-  }
-
-  #content-wrapper {
-    transition: transform 0.3s ease-in-out;
-    transform: translateX(0); /* Default position */
-    margin-right: 40%;
-    margin-left: 5%;
   }
 }
