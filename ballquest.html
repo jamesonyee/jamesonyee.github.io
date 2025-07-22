@@ -1,122 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Slab:wght@100..900&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <link rel="stylesheet" href="styles/style.css" />
-    <script src="/js/sidebar.js"></script>
-  </head>
-  <body>
-    <header>
-      <i class="fa fa-bars" id="hamburger" aria-hidden="true"></i>
-      <nav id="sidebar">
-        <i class="fa fa-times" id="close-button" aria-hidden="true"></i>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Slab:wght@100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="styles/style.css" />
+  <script src="/js/sidebar.js"></script>
+</head>
+
+<body>
+  <header>
+    <i class="fa fa-bars" id="hamburger" aria-hidden="true"></i>
+    <nav id="sidebar">
+      <i class="fa fa-times" id="close-button" aria-hidden="true"></i>
+      <br />
+
+      <details>
+        <summary>Home</summary>
+        <ul>
+          <li><a href="index.html#introduction">Introduction</a></li>
+          <li><a href="index.html#skills">Interests</a></li>
+          <li><a href="index.html#edu">Education</a></li>
+          <li><a href="index.html#exp">Experience</a></li>
+          <li><a href="index.html#Resume">Resume</a></li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>Projects</summary>
+        <ul>
+          <li><a href="/waves.html">Wave Simulation</a></li>
+          <li><a href="/flightsim.html">Flight Simulator</a></li>
+          <li><a href="/ballquest.html"> BallQuest AR</a></li>
+          <li><a href="/MLviewer.html"> ML2 Model viewer</a></li>
+          <li><a href="/models.html"> 3D Models </a></li>
+        </ul>
+      </details>
+    </nav>
+  </header>
+  <div id="content-wrapper">
+    <iframe id="video" src="https://www.youtube.com/embed/7H5jeW4aw6o?si=zW9R-TJO_izsbqEC" title="YouTube video player"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <div id="writeup">
+      <h1>Overview</h1>
+      <p>
+        Designed and developed an innovative AR maze game as part of a team
+        senior capstone project, delivering an immersive mixed-reality
+        experience. Leveraged the advanced passthrough capabilities of the
+        Meta Quest 3 to seamlessly blend virtual elements with the real world,
+        enhancing user interaction and immersion. Built on Unreal Engine 5,
+        the game features realistic physics that enable players to interact
+        with virtual balls by tilting and manipulating a physical box,
+        creating intuitive and engaging gameplay that bridges the gap between
+        digital and physical environments.
+      </p>
+
+      <h1>Key Components</h1>
+      <h2>1. Passthrough</h2>
+      <p>
+        The passthrough feature on the Meta Quest 3 allows users to see their
+        real-world surroundings while interacting with virtual elements,
+        creating a mixed-reality experience. In BallQuest AR, this allows the
+        user to hold a real box and view the game drawn in 3D inside of it.
+        <img src="/src/passthrough screenshot.jpg" />
+
+        The image above showcases the Unreal Engine 5 view of the player. The
+        mazes are attached as static mesh components to the controller,
+        ensuring that digital elements move in sync with the real-world box.
+        In the final product, the controller is attached to the box, providing
+        tactile feedback and simulating the "weight" of the virtual maze,
+        enhancing immersion.
+      </p>
+      <h2>2. Maze Generation</h2>
+      <p>
+        3D mazes are the core of our game. Below is how we accomplished
+        creating mazes of varying difficulty and added them to the game
         <br />
-
-        <details>
-          <summary>
-            <i class="fa fa-times" id="close-button" aria-hidden="true"></i
-            ><a href="/">Home</a>
-          </summary>
-          <ul>
-            <li><a href="index.html#introduction">Introduction</a></li>
-            <li><a href="index.html#skills">Interests</a></li>
-            <li><a href="index.html#edu">Education</a></li>
-            <li><a href="index.html#exp">Experience</a></li>
-            <li><a href="index.html#Resume">Resume</a></li>
-          </ul>
-        </details>
-
-        <details>
-          <summary>Projects</summary>
-          <ul>
-            <li><a href="/waves.html">Wave Simulation</a></li>
-            <li><a href="/ballquest.html"> BallQuest AR</a></li>
-            <li><a href="/MLviewer.html"> ML2 Model viewer</a></li>
-            <li><a href="/models.html"> 3D Models </a></li>
-          </ul>
-        </details>
-      </nav>
-    </header>
-    <div id="content-wrapper">
-      <iframe
-        id="video"
-        src="https://www.youtube.com/embed/7H5jeW4aw6o?si=zW9R-TJO_izsbqEC"
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      ></iframe>
-      <div id="writeup">
-        <h1>Overview</h1>
-        <p>
-          Designed and developed an innovative AR maze game as part of a team
-          senior capstone project, delivering an immersive mixed-reality
-          experience. Leveraged the advanced passthrough capabilities of the
-          Meta Quest 3 to seamlessly blend virtual elements with the real world,
-          enhancing user interaction and immersion. Built on Unreal Engine 5,
-          the game features realistic physics that enable players to interact
-          with virtual balls by tilting and manipulating a physical box,
-          creating intuitive and engaging gameplay that bridges the gap between
-          digital and physical environments.
-        </p>
-
-        <h1>Features</h1>
-
-        <h1>Key Components</h1>
-        <h2>1. Passthrough</h2>
-        <p>
-          The passthrough feature on the Meta Quest 3 allows users to see their
-          real-world surroundings while interacting with virtual elements,
-          creating a mixed-reality experience. In BallQuest AR, this allows the
-          user to hold a real box and view the game drawn in 3D inside of it.
-          <img src="/src/passthrough screenshot.jpg" />
-
-          The image above showcases the Unreal Engine 5 view of the player. The
-          mazes are attached as static mesh components to the controller,
-          ensuring that digital elements move in sync with the real-world box.
-          In the final product, the controller is attached to the box, providing
-          tactile feedback and simulating the "weight" of the virtual maze,
-          enhancing immersion.
-        </p>
-        <h2>2. Maze Generation</h2>
-        <p>
-          3D mazes are the core of our game. Below is how we accomplished
-          creating mazes of varying difficulty and added them to the game
-          <br />
-          <br />
-          We used
-          <a href="https://www.mazegenerator.net/">www.mazegenerator.net/</a>
-          which is a web based maze generator that generates customizable 2d
-          mazes in various file formats for users. For this implementation we
-          used orthonganal (square celled) mazes. The generator allows users to
-          choose a specific height and width which is how we are able to make
-          more difficult mazes. The generator outputs a 2d SVG which we were
-          able to import into blender to give it a height and thickness modifier
-          to make it a 3D game ready asset for UE5.
-        </p>
-        <div style="display: flex; gap: 10px">
-          <img src="/src/maze.jpg" alt="2D Maze" style="width: 30%" />
-          <img
-            src="/src/mazeblender.jpg"
-            alt="3D Maze in Blender"
-            style="width: 70%"
-          />
-        </div>
+        <br />
+        We used
+        <a href="https://www.mazegenerator.net/">www.mazegenerator.net/</a>
+        which is a web based maze generator that generates customizable 2d
+        mazes in various file formats for users. For this implementation we
+        used orthonganal (square celled) mazes. The generator allows users to
+        choose a specific height and width which is how we are able to make
+        more difficult mazes. The generator outputs a 2d SVG which we were
+        able to import into blender to give it a height and thickness modifier
+        to make it a 3D game ready asset for UE5.
+      </p>
+      <div style="display: flex; gap: 10px">
+        <img src="/src/maze.jpg" alt="2D Maze" style="width: 30%" />
+        <img src="/src/mazeblender.jpg" alt="3D Maze in Blender" style="width: 70%" />
       </div>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>
