@@ -55,27 +55,126 @@
         </nav>
     </header>
     <div id="content-wrapper">
+        <div id="writeup">
         <h1>Twin Atlas Application </h1>
 
-        I specialize in real-time interactive experiences, focusing on gameplay prototyping and programming. My primary
+        <p>I specialize in real-time interactive experiences, focusing on gameplay prototyping and programming. My primary
         tools are Unreal Engine 5, C++, and Blueprints, which I use to develop mechanics, character systems, and
         interactive environments for both virtual reality and traditional platforms.
-
+    
         While my core experience is in Unreal Engine 5, these demos highlight the versatility and adaptability of my
         skills. In Roblox Studio, I’ve built working prototypes using Lua—such as a wave based zombie survival game, and
         an endless runner with procedurally generated obstacles and coin placement.
-
-        <div id="writeup">
+        </p>
+        
             <h1>Wave-Based Survival Game Demo </h1>
+            <iframe 
+                id="video" 
+                src="https://www.youtube.com/embed/sJWHWXioG4o?si=qcnV35zahwDTR2CP" 
+                title="YouTube video player" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <p class="caption">Map made by <a href="https://create.roblox.com/store/asset/8134919544/zombie-map-two">@samigejmer123 </a>
+           <h2>Features</h2>
 
-            For this demo, I built a custom client-side viewmodel with scripts to handle combat and shooting mechanics.
-            On the server side, I implemented systems to manage kill tracking, wave progression, and game state. The
-            server side script is designed around a zombie template folder, allowing for easy spawning of different
-            enemy types by
-            placing multiple variants in a shared pool. Enemy AI uses elements of the Roblox Studio pathfinding library
-            for navigation.
+           <h3>1. Wave-Based Spawning with Zombie Variety</h3>
+        <p>
+            Each round, zombies are spawned from a configurable pool of enemy types—allowing the system to introduce new zombie variants as the game progresses.
+            The number of zombies per wave increases over time, and each zombie’s health scales with the current wave’s difficulty multiplier.
+            This ensures that rounds become progressively more challenging, with both stronger enemies and higher enemy counts.
+        </p>
+        <details>
+            <summary>Show Lua Code</summary>
+            <pre><code class="language-lua">function ZombieWaveManager:NextWave()
+            self.CurrentWave += 1
+            self.ZombiesKilled = 0
+            self.ZombiesAlive = 0
 
-            <p class="caption">Blox Ops</p>
+            -- Calculate zombie count and health scaling
+            local zombiesToSpawn = math.floor(WAVE_CONFIG.InitialZombies +
+                WAVE_CONFIG.ZombieIncrement * (self.CurrentWave - 1))
+            local healthMultiplier = WAVE_CONFIG.DifficultyIncrease ^ (self.CurrentWave - 1)
+
+            -- Spawn from a pool of possible zombie types
+            for i = 1, zombiesToSpawn do
+                task.spawn(function()
+                    self:SpawnZombie(healthMultiplier) -- applies scaling health
+                end)
+                task.wait(0.5)
+            end
+        end
+
+        function ZombieWaveManager:SpawnZombie(healthMultiplier)
+            if not self.Active then return end
+
+            -- Pick a zombie type from the pool
+            local zombieTypes = { "Zombie" } -- More types can be added here
+            local chosenType = zombieTypes[math.random(1, #zombieTypes)]
+            local template = self.ZombiePool:FindFirstChild(chosenType)
+            if not template then return end
+
+            local zombie = template:Clone()
+            local humanoid = zombie:FindFirstChildOfClass("Humanoid")
+            if not humanoid then return end
+
+            -- Apply health scaling
+            humanoid.MaxHealth = humanoid.MaxHealth * healthMultiplier
+            humanoid.Health = humanoid.MaxHealth
+
+            -- Mark as zombie
+            local isZombie = Instance.new("BoolValue")
+            isZombie.Name = "IsZombie"
+            isZombie.Value = true
+            isZombie.Parent = zombie
+
+            -- Position zombie near a random player
+            local players = game.Players:GetPlayers()
+            if #players > 0 then
+                local basePos = players[math.random(1, #players)].Character:GetPivot().Position
+                local spawnPos = basePos + Vector3.new(
+                    math.random(-WAVE_CONFIG.SpawnRadius, WAVE_CONFIG.SpawnRadius),
+                    0,
+                    math.random(-WAVE_CONFIG.SpawnRadius, WAVE_CONFIG.SpawnRadius)
+                )
+                zombie:PivotTo(CFrame.new(spawnPos))
+            end
+
+            zombie.Parent = workspace
+            self.ZombiesAlive += 1
+        end</code></pre>
+        </details>
+
+
+            <h3>2. Precision Shooting and Damage System</h3>
+            <p>
+                Players use hitscan shooting to damage zombies. The shooting system uses raycasting for instant hit detection, spawns visual bullet trails,
+                and notifies the server to apply damage.
+            </p>
+            <details>
+                <summary>Show Lua Code</summary>
+                <pre><code class="language-lua">function shoot()
+                local origin = camera.CFrame.Position
+                local direction = camera.CFrame.LookVector * 500
+                local raycastParams = RaycastParams.new()
+                raycastParams.FilterDescendantsInstances = {character, ViewModel}
+                raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+                raycastParams.IgnoreWater = true
+
+                local result = workspace:Raycast(origin, direction, raycastParams)
+
+                if result then
+                    local hitPart = result.Instance
+                    local hitHumanoid = hitPart.Parent:FindFirstChildOfClass("Humanoid")
+                    if hitHumanoid and hitHumanoid.Parent:FindFirstChild("IsZombie") then
+                        local damageEvent = game.ReplicatedStorage:FindFirstChild("ZombieWave_ZombieKilled")
+                        if damageEvent then
+                            damageEvent:FireServer(hitHumanoid.Parent)
+                        end
+                    end
+                end
+            end</code></pre>
+            </details>
 
             <h1>Infinite Runner Demo</h1>
 
@@ -85,7 +184,7 @@
                 referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             <h2>Features</h2>
             <h3>1. Procedural Generation</h3>
-            <p>Coins and obstacles are procedurally generated ahead of the player across three lanes allowing
+            <p>Coins and obstacles are procedurally generated, by the server, ahead of the player across three lanes allowing
                 players to
                 make calculated risks to collect coins. Spawning adapts to the player's position and ensures dynamic
                 and
