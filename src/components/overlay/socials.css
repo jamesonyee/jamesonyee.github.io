@@ -1,0 +1,44 @@
+.social-links {
+    position: fixed;
+    bottom: 30px;
+    left: 50px;
+    z-index: 1001; /* Higher than Three.js canvas (usually 0-1000) */
+    display: flex;
+    gap: 10px;
+    pointer-events: auto; /* Make sure it's clickable */
+}
+
+.social-links a {
+    color: white;
+    text-decoration: none;
+    border-radius: 8px; /* Slightly rounded corners */
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px; /* Fixed size */
+    height: 40px; /* Fixed size */
+    padding: 5px;
+}
+
+.social-links a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px) scale(1.1); /* Slight scale on hover */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.social-links img {
+    width: 48px; /* Original icon size */
+    height: 48px;
+    filter: brightness(0) invert(1);
+}
+
+.social-links a:last-child img {
+  width: 35px;  /* Slightly smaller if it's rectangular */
+  height: 35px;
+}
+
+/* If using text labels */
+.social-links .icon-label {
+    display: none; /* Hide text labels by default */
+}

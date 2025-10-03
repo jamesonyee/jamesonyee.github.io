@@ -1,134 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
   <link
-    href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Slab:wght@100..900&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="styles/style.css" />
-  <link rel="stylesheet" href="styles/homepage.css" />
-  <script src="/js/sidebar.js"></script>
-  <title>Jameson Yee - About Me</title>
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jameson Yee</title>
 </head>
 
 <body>
-  <header>
-    <i class="fa fa-bars" id="hamburger" aria-hidden="true"></i>
-    <nav id="sidebar">
-      <i class="fa fa-times" id="close-button" aria-hidden="true"></i>
-      <br />
-
-      <details>
-        <summary>Home</summary>
-        <ul>
-          <li><a href="index.html#introduction">Introduction</a></li>
-          <li><a href="index.html#skills">Interests</a></li>
-          <li><a href="index.html#edu">Education</a></li>
-          <li><a href="index.html#exp">Experience</a></li>
-          <li><a href="index.html#Resume">Resume</a></li>
-        </ul>
-      </details>
-
-      <details>
-        <summary>Projects</summary>
-        <ul>
-          <li><a href="/waves.html">Wave Simulation</a></li>
-          <li><a href="/flightsim.html">Flight Simulator</a></li>
-          <li><a href="/ballquest.html"> BallQuest AR</a></li>
-          <li><a href="/MLviewer.html"> ML2 Model viewer</a></li>
-          <li><a href="/models.html"> 3D Models </a></li>
-        </ul>
-      </details>
-    </nav>
-  </header>
-
-  <div id="content-wrapper">
-    <main>
-      <section id="introduction">
-        <h2>Hi, I'm Jameson Yee!</h2>
-        <p>
-          I am a computer science graduate from Oregon State University based in San Francisco, CA. My work spans game
-          development, XR applications, and computer graphics, including real-time simulations and interactive visual
-          experiences. I’ve built projects in Unreal Engine, Roblox Studio, and OpenGL—ranging from physics-based
-          systems and procedural animation to immersive AR/VR prototypes.
-        </p>
-      </section>
-
-      <hr />
-
-      <!-- Intrests Section -->
-      <section id="skills">
-        <h2>Interests</h2>
-        <ul>
-          <li>XR development</li>
-          <li>Physics-Based Simulation</li>
-          <li>3D Modeling and Animation</li>
-        </ul>
-      </section>
-
-      <hr />
-
-      <!-- education Section -->
-      <section id="edu">
-        <h2>Education</h2>
-        <div class="edu-container">
-          <div class="osu-logo">
-            <img src="src/osulogo.jfif" alt="OSU Logo" />
-          </div>
-          <div class="edu-details">
-            <p>Oregon State University</p>
-            <p>Bachelor of Computer Science (2020 - 2024)</p>
-            <p>GPA: 3.07</p>
-          </div>
-        </div>
-      </section>
-
-      <hr />
-
-      <!-- Experience Section -->
-      <section id="exp">
-        <h2>Experience</h2>
-
-        <div class="exp-item">
-          <img src="src/siggraphlogo.png" alt="SIGGRAPH Logo" />
-          <div class="exp-details">
-            <p><b>SIGGRAPH Student Volunteer</b></p>
-          </div>
-        </div>
-
-        <div class="exp-item">
-          <img src="src/altosulogo" alt="OSU Logo" />
-          <div class="exp-details">
-            <p><b>Undergraduate Graphics Research Assistant</b></p>
-          </div>
-        </div>
-      </section>
-
-      <hr />
-
-      <!-- Resume Section -->
-      <section id="Resume">
-        <h2>Resume</h2>
-        <a href="/src/jamesony.pdf"><img src="src/resume.jpg" /></a>
-      </section>
-
-      <!-- Contact Section -->
-      <footer>
-        <p>
-          <a href="https://www.linkedin.com/in/jamesonyee/" style="text-decoration: none; color: inherit">
-            <i class="fa fa-linkedin-square" style="font-size: 48px"></i>
-          </a>
-          <a href="https://github.com/jamesonyee" style="text-decoration: none; color: inherit">
-            <i class="fa fa-github-square" style="font-size: 48px"></i>
-          </a>
-        </p>
-      </footer>
-    </main>
-  </div>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
 </body>
 
 </html>
