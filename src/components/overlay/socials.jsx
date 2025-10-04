@@ -9,7 +9,7 @@ function Socials() {
             <a href="https://github.com/jamesonyee" target="_blank" rel="noopener noreferrer">
                 <img src="/icons/github-square.svg"></img>
             </a>
-            <a href="" target="_blank" rel="noopener noreferrer">
+            <a href="/imgs/jamesonyeeresume.pdf" target="_blank" rel="noopener noreferrer">
                 <img src="/icons/resume.svg"></img>
             </a>
         </div>
