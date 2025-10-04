@@ -149,7 +149,7 @@ function FolioModal({ onClose }){
             shortDesc: "Procedural wave simulator",
             fullDesc: " a real-time Gerstner wave simulation using OpenGL and GLSL with custom vertex/fragment shaders. Implemented interactive parameter controls to dynamically manipulate wave properties and enhance physical accuracy.",
             image: "./imgs/waves.png",
-            link: "https://jamesonyee.github.io/waves.html",
+            link: "https://jamesonyee.github.io/Wave-Sim/",
             technologies: ["WebGL", "GLSL"],
             media: {
                 type: "youtube",
