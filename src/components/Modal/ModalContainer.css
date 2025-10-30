@@ -11,10 +11,6 @@
     z-index: 2000;
 }
 
-#about-modal {
-    overflow: hidden;
-}
-
 .modal-content-wrapper {
     position: relative;
     display: flex;
