@@ -97,6 +97,19 @@ function ProjectCard ({project}) {
                     {project.media && renderMedia()}
                     
                     <p className='full-description'>{project.fullDesc}</p>
+
+                    <div className='project-links'>
+                        {project.link && (
+                            <a href={project.link} target="_blank" rel="noopener noreferrer" className="project-link">
+                                Project Page
+                            </a>
+                        )}
+                        {project.github && (
+                            <a href={project.github} target="_blank" rel="noopener noreferrer" className="project-link">
+                                GitHub Repository
+                            </a>
+                        )}
+                    </div>
                     
                     <div className='tech-stack'>
                         {project.technologies && (
@@ -110,19 +123,6 @@ function ProjectCard ({project}) {
                             </>
                         )}
                     </div>
-                    
-                    <div className='project-links'>
-                        {project.link && (
-                            <a href={project.link} target="_blank" rel="noopener noreferrer" className="project-link">
-                                View Project Details
-                            </a>
-                        )}
-                        {project.github && (
-                            <a href={project.github} target="_blank" rel="noopener noreferrer" className="project-link">
-                                GitHub Repository
-                            </a>
-                        )}
-                    </div>
                 </div>
             </div>
         </div>
@@ -131,6 +131,19 @@ function ProjectCard ({project}) {
 
 function FolioModal({ onClose }){
     const projects = [
+        {
+            id: 0,
+            title: "Neon Pinball",
+            shortDesc: "Pinball game using Ray Marching and Signed Distance Fields",
+            fullDesc: "Work completed with Basant Khalil for Computer Graphics: Animation and Simulation at Stanford University. A neon-themed pinball game built in p5.js using ray-marching and signed distance functions (SDFs) for physics and collision detection. Features interactive flippers, bumpers, and slingshots, with glowing visuals, particle effects, combo scoring, and reactive sound for a fast-paced, arcade feel. ",
+            image: "./imgs/pinball.jpg",
+            technologies: ["Unity", "Magic Leap 2",],
+            link: "https://jamesonyee.github.io/pinball/",
+            media: {
+                type: "youtube",
+                content: "https://www.youtube.com/watch?v=a_SF1dSaibM"
+            }
+        },
         {
             id: 1,
             title: "Auto Turntable Plugin",
@@ -162,7 +175,6 @@ function FolioModal({ onClose }){
             shortDesc: "A realistic flight simulation experience",
             fullDesc: "This project is a custom flight simulation experience built in Unreal Engine 5, combining real-time geospatial data with accurate flight dynamics. Using the JSBSim plugin, the simulator models realistic aircraft behavior, while Cesium integrates high-resolution 3D terrain and satellite imagery for a truly global environment.",
             image: "./imgs/jet.png",
-            link: "https://jamesonyee.github.io/flightsim",
             technologies: ["Unreal Engine", "Blueprints", "Blender"],
             media: {
                 type: "youtube",
@@ -181,7 +193,6 @@ function FolioModal({ onClose }){
                 content: "https://www.youtube.com/watch?v=epFFwjtkQlc" // Example video embed
             }
         },
-        
     ]
 
         return (
