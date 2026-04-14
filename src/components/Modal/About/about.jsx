@@ -6,10 +6,8 @@ function About() {
       <section className="about-intro">
         <h2>About me</h2>
         <p>
-            I am a creative technologist based in the San Francisco Bay Area. 
-            I am interested in using my computer science background to build tools 
-            and simulations that bridge the gap between creative vision and technical execution. 
-            My goal is to tell meaningful stories through the power of computer graphics. 
+            I am a creative technologist based in the San Francisco Bay Area.  
+            My goal is to use my technical skills to help tell meaningful stories through the power of computer graphics. 
         </p>
       </section>
 

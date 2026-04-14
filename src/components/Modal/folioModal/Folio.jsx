@@ -133,15 +133,14 @@ function FolioModal({ onClose }){
     const projects = [
         {
             id: 0,
-            title: "Neon Pinball",
-            shortDesc: "Pinball game using Ray Marching and Signed Distance Fields",
-            fullDesc: "Work completed with Basant Khalil for Computer Graphics: Animation and Simulation at Stanford University. A neon-themed pinball game built in p5.js using ray-marching and signed distance functions (SDFs) for physics and collision detection. Features interactive flippers, bumpers, and slingshots, with glowing visuals, particle effects, combo scoring, and reactive sound for a fast-paced, arcade feel. ",
-            image: "./imgs/pinball.jpg",
-            technologies: ["Unity", "Magic Leap 2",],
-            link: "https://jamesonyee.github.io/pinball/",
+            title: "AI Look Dev",
+            shortDesc: "Cinematic look development for a sci-fi environment using AI",
+            fullDesc: "A Star Wars-inspired corridor environment focused on cinematic lighting, atmosphere, and storytelling. Developed a workflow using ComfyUI and Stable Diffusion, leveraging controlNets to preserve scene geometry while iterating on lighting and materials. Explored multiple narrative-driven lighting scenarios including clean, emergency, and damaged states to enhance mood and visual storytelling. Emphasizes photorealism, composition, and efficient iteration for production-style environment development. ",
+            image: "./imgs/hallway-comp.jpg",
+            technologies: ["ComfyUI", "Maya",],
             media: {
                 type: "youtube",
-                content: "https://www.youtube.com/watch?v=a_SF1dSaibM"
+                content: "https://youtu.be/PQM6AjBNLs8"
             }
         },
         {
@@ -157,7 +156,7 @@ function FolioModal({ onClose }){
             }
         },
         {
-            id: 2,
+            id: 3,
             title: "Gestner Waves",
             shortDesc: "Procedural wave simulator",
             fullDesc: " a real-time Gerstner wave simulation using OpenGL and GLSL with custom vertex/fragment shaders. Implemented interactive parameter controls to dynamically manipulate wave properties and enhance physical accuracy.",
@@ -170,7 +169,7 @@ function FolioModal({ onClose }){
             }
         },
         {
-            id: 3,
+            id: 4,
             title: "Flight Simulator",
             shortDesc: "A realistic flight simulation experience",
             fullDesc: "This project is a custom flight simulation experience built in Unreal Engine 5, combining real-time geospatial data with accurate flight dynamics. Using the JSBSim plugin, the simulator models realistic aircraft behavior, while Cesium integrates high-resolution 3D terrain and satellite imagery for a truly global environment.",
@@ -182,7 +181,20 @@ function FolioModal({ onClose }){
             }
         },
         {
-            id: 4,
+            id: 2,
+            title: "Neon Pinball",
+            shortDesc: "Pinball game using Ray Marching and Signed Distance Fields",
+            fullDesc: "Work completed with Basant Khalil for Computer Graphics: Animation and Simulation at Stanford University. A neon-themed pinball game built in p5.js using ray-marching and signed distance functions (SDFs) for physics and collision detection. Features interactive flippers, bumpers, and slingshots, with glowing visuals, particle effects, combo scoring, and reactive sound for a fast-paced, arcade feel. ",
+            image: "./imgs/pinball.jpg",
+            technologies: ["Unity", "Magic Leap 2",],
+            link: "https://jamesonyee.github.io/pinball/",
+            media: {
+                type: "youtube",
+                content: "https://www.youtube.com/watch?v=a_SF1dSaibM"
+            }
+        },
+        {
+            id: 5,
             title: "AchorViz",
             shortDesc: "Magic Leap 2 model visualizer",
             fullDesc: "ML2-AnchorViz is a Unity-based Augmented Reality (AR) project that leverages the capabilities of Magic Leap 2 and Unity’s AR Foundation. This application allows users to place four anchor points in a real-world environment and visualize 3D models within the defined plane.",
